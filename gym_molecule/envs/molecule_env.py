@@ -1,57 +1,100 @@
 import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
+from gym import spaces
 
+from rdkit import Chem
+from rdkit.Chem import Draw
+
+import numpy as np
 
 class MoleculeEnvironment(gym.Env):
+    """
+    Observation:
+        Type: Box(4)
+        Num     Observation               Min          Max
+        0       Number of Atoms           0            Number of Atoms in Molecule
+        1       Number of Bonds           0            Number of Bonds in Molecule
+        2       Number of Conformers      0            Number of Conformers in Molecule
+        
+    Actions:
+        Type: Discrete(6)
+        Num   Action
+        0     Add Atom
+        1     Remove Atom
+        2     Add Bond
+        3     Remove Bond
+        4     Add Conformer
+        5     Remove Conformer
+    """
     def __init__(self):
-        print("works")
-        super().__init__()
-<<<<<<< HEAD
-        
-        self.action_space = spaces.Discrete( 3 )
-        self.reset()
-=======
-        #We need to define the action space. It is a spaces.Discrete with actions 0..n-1. 
-        self.action_space = spaces.Discrete("""Number of actions:""" 2) 
-        
-        self.observation_space = spaces.Box()
-        print("Molecule Environment initiated.")
->>>>>>> c5e9137... Defined action and obs space.
+
+        self.molecule = Chem.MolFromSmiles("C=C-C-C=C-C-O")
+        self.atoms = self.molecule.GetNumAtoms()
+        self.bonds = self.molecule.GetNumBonds()
+        self.conformers = self.molecule.GetNumConformers()
+
+        # MAX values in observation space
+        high = np.array([self.atoms,
+                        self.bonds,
+                        self.conformers],
+                        dtype=np.float32)
+
+        self.action_space = spaces.Discrete(6)
+        self.observation_space = spaces.Box(0, high, dtype=np.float32)
+
+        self.seed()
+        self.state = None
 
     def step(self, action):
-        print(action)
-        
-        """
+        err_msg = "%r (%s) invalid" % (action, type(action))
+        assert self.action_space.contains(action), err_msg
 
-        Parameters
-        ----------
-        action : {Option from policy}
+        atoms, bonds, conformers = self.state
+        if action == 0:
+            atoms += 1
+        elif action == 1:
+            atoms -= 1
+        elif action == 2:
+            bonds += 1
+        elif action == 3:
+            bonds -= 1
+        elif action == 4:
+            conformers += 1
+        else:
+            conformers -= 1
 
-        Returns
-        -------
-        Observation, reward, Done, info : tuple
-             Observation (object) :
-                 Observation of state of the environment.
-                
-            reward (float) :
-                 Amount of reward associated with the previous action, goal is always to increase
-                 your total reward.
-                
-            Done (bool) :
-                 Whether it's time to reset the environment again.
-                
-            info (dict) :
-                 Could contain the raw probabilities behind the environment's last state change.
-                 
-        """
+        self.state = (atoms, bonds, conformers)
+        print(self.state)
+
+        done = bool(
+            atoms < 0 or
+            atoms >= self.atoms or
+            bonds < 0 or
+            bonds >= self.bonds or
+            conformers < 0 or
+            conformers >= self.conformers
+        )
+
+        if not done:
+            reward = calculateReward()
+        else:
+            reward = 0
+
+        return np.array(self.state), reward, done, {}
+
+
+    def calculateReward():
+        # OUT OF SCOPE
+        pass
 
     def reset(self):
-        
-        raise NotImplementedError
+        self.state = self.np_random.uniform(low=0, high=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
+        return np.array(self.state)
 
     def render(self):
         raise NotImplementedError
 
-    def seed(self):
-        raise NotImplementedError
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        return [seed]
