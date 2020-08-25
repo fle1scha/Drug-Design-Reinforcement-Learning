@@ -7,9 +7,17 @@ class MoleculeEnvironment(gym.Env):
     def __init__(self):
         print("works")
         super().__init__()
+<<<<<<< HEAD
         
         self.action_space = spaces.Discrete( 3 )
         self.reset()
+=======
+        #We need to define the action space. It is a spaces.Discrete with actions 0..n-1. 
+        self.action_space = spaces.Discrete("""Number of actions:""" 2) 
+        
+        self.observation_space = spaces.Box()
+        print("Molecule Environment initiated.")
+>>>>>>> c5e9137... Defined action and obs space.
 
     def step(self, action):
         print(action)
@@ -39,6 +47,7 @@ class MoleculeEnvironment(gym.Env):
         """
 
     def reset(self):
+        
         raise NotImplementedError
 
     def render(self):
