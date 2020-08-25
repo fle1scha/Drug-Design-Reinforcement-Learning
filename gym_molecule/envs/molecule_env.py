@@ -5,10 +5,38 @@ from gym.utils import seeding
 
 class MoleculeEnvironment(gym.Env):
     def __init__(self):
+        print("works")
         super().__init__()
+        
+        self.action_space = spaces.Discrete( 3 )
+        self.reset()
 
-    def step(self):
-        raise NotImplementedError
+    def step(self, action):
+        print(action)
+        
+        """
+
+        Parameters
+        ----------
+        action : {Option from policy}
+
+        Returns
+        -------
+        Observation, reward, Done, info : tuple
+             Observation (object) :
+                 Observation of state of the environment.
+                
+            reward (float) :
+                 Amount of reward associated with the previous action, goal is always to increase
+                 your total reward.
+                
+            Done (bool) :
+                 Whether it's time to reset the environment again.
+                
+            info (dict) :
+                 Could contain the raw probabilities behind the environment's last state change.
+                 
+        """
 
     def reset(self):
         raise NotImplementedError
