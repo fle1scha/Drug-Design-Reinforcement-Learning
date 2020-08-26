@@ -47,7 +47,7 @@ class MoleculeEnvironment(gym.Env):
         self.seed()
         self.state = None
 
-    def step(self, action)
+    def step(self, action):
         
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
@@ -91,7 +91,7 @@ class MoleculeEnvironment(gym.Env):
         pass
 
     def reset(self):
-        self.state = self.np_random.uniform(low=0, cihigh=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
+        self.state = self.np_random.uniform(low=0, high=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
         return np.array(self.state)
 
     def render(self):
