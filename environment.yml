@@ -11,6 +11,7 @@ dependencies:
   - flake8
   - pytest
   - pytest-cov
+  - import_ipynb
   - pip:
     - gym
     - rstcheck

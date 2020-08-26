@@ -30,6 +30,7 @@ class MoleculeEnvironment(gym.Env):
     def __init__(self):
 
         self.molecule = Chem.MolFromSmiles("C=C-C-C=C-C-O")
+        
         self.atoms = self.molecule.GetNumAtoms()
         self.bonds = self.molecule.GetNumBonds()
         self.conformers = self.molecule.GetNumConformers()
@@ -46,7 +47,8 @@ class MoleculeEnvironment(gym.Env):
         self.seed()
         self.state = None
 
-    def step(self, action):
+    def step(self, action)
+        
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
 
@@ -89,12 +91,48 @@ class MoleculeEnvironment(gym.Env):
         pass
 
     def reset(self):
-        self.state = self.np_random.uniform(low=0, high=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
+        self.state = self.np_random.uniform(low=0, cihigh=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
         return np.array(self.state)
 
     def render(self):
-        raise NotImplementedError
+        return Chem.MolFromSmiles('C1OC1')
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+    
+    
+    
+    
+    # PROTOTYPE CODE methods 
+    
+    # init
+    def Get_possible_Atoms():
+        atoms = ['C', 'N', 'O', 'S', 'Cl'] 
+        return atoms
+    
+    def Get_possible_Bonds():
+        bonds = ["double", "Single", "Triple"]
+        return bonds
+    
+    def Get_possible_actions():
+        actions = [0,1,2,3,4,5]
+        return 
+    
+    # step
+    elements = Chem.GetPeriodicTable()
+    def GetValency(element):
+        return list(elements.GetValenceList(element))[0]
+    
+    def Check_Validity(state):
+        valid = True
+        return valid
+    
+    def Get_reward():
+        reward = 1
+        return reward
+        
+    
+    # 
+    
+    
