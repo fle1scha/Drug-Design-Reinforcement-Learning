@@ -31,28 +31,57 @@ class MoleculeEnvironment(gym.Env):
 
         self.molecule = Chem.MolFromSmiles("C=C-C-C=C-C-O")
         
+        #Set observation_space values based on self.molecule
         self.atoms = self.molecule.GetNumAtoms()
         self.bonds = self.molecule.GetNumBonds()
         self.conformers = self.molecule.GetNumConformers()
 
-        # MAX values in observation space
+        #The high (max) values for the observation_space values
         high = np.array([self.atoms,
                         self.bonds,
                         self.conformers],
                         dtype=np.float32)
 
+        #The action_space is defined. 
         self.action_space = spaces.Discrete(6)
+        
+        #The observation_space is defined.
         self.observation_space = spaces.Box(0, high, dtype=np.float32)
 
         self.seed()
         self.state = None
+   
+    """This __init__ method allows the user to input a starting molecule in Smiles format"""
+    def __init__(self, inputMol):
+        self.molecule = Chem.MolFromSmiles(inputMol);
+        
+        #Set observation_space values based on self.molecule
+        self.atoms = self.molecule.GetNumAtoms()
+        self.bonds = self.molecule.GetNumBonds()
+        self.conformers = self.molecule.GetNumConformers()
 
+        #The high (max) values for the observation_space values
+        high = np.array([self.atoms,
+                        self.bonds,
+                        self.conformers],
+                        dtype=np.float32)
+
+        #The action_space is defined. 
+        self.action_space = spaces.Discrete(6)
+        
+        #The observation_space is defined.
+        self.observation_space = spaces.Box(0, high, dtype=np.float32)
+
+        self.seed()
+        self.state = None
     def step(self, action):
         
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
 
         atoms, bonds, conformers = self.state
+        
+        #This switch determines how the environment changes given the agent's action. 
         if action == 0:
             atoms += 1
         elif action == 1:
@@ -66,8 +95,9 @@ class MoleculeEnvironment(gym.Env):
         else:
             conformers -= 1
 
+        #The observation state of the env is refreshed.
         self.state = (atoms, bonds, conformers)
-        print(self.state)
+        
 
         done = bool(
             atoms < 0 or
@@ -82,7 +112,7 @@ class MoleculeEnvironment(gym.Env):
             reward = calculateReward()
         else:
             reward = 0
-
+        
         return np.array(self.state), reward, done, {}
 
 
@@ -100,7 +130,6 @@ class MoleculeEnvironment(gym.Env):
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
-    
     
     
     
