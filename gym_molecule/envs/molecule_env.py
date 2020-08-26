@@ -51,29 +51,7 @@ class MoleculeEnvironment(gym.Env):
         self.seed()
         self.state = None
    
-    """This __init__ method allows the user to input a starting molecule in Smiles format"""
-    def __init__(self, inputMol):
-        self.molecule = Chem.MolFromSmiles(inputMol);
-        
-        #Set observation_space values based on self.molecule
-        self.atoms = self.molecule.GetNumAtoms()
-        self.bonds = self.molecule.GetNumBonds()
-        self.conformers = self.molecule.GetNumConformers()
-
-        #The high (max) values for the observation_space values
-        high = np.array([self.atoms,
-                        self.bonds,
-                        self.conformers],
-                        dtype=np.float32)
-
-        #The action_space is defined. 
-        self.action_space = spaces.Discrete(6)
-        
-        #The observation_space is defined.
-        self.observation_space = spaces.Box(0, high, dtype=np.float32)
-
-        self.seed()
-        self.state = None
+   
     def step(self, action):
         
         err_msg = "%r (%s) invalid" % (action, type(action))
@@ -85,20 +63,20 @@ class MoleculeEnvironment(gym.Env):
         if action == 0:
             atoms += 1
         elif action == 1:
-            atoms -= 1
+            atoms += 1
         elif action == 2:
             bonds += 1
         elif action == 3:
-            bonds -= 1
+            bonds += 1
         elif action == 4:
             conformers += 1
         else:
-            conformers -= 1
+            conformers += 1
 
         #The observation state of the env is refreshed.
         self.state = (atoms, bonds, conformers)
         
-
+        #In order to fix each Episode only iterating once. We must ensure this doesn't evaluate to true after one iteration.
         done = bool(
             atoms < 0 or
             atoms >= self.atoms or
@@ -151,6 +129,7 @@ class MoleculeEnvironment(gym.Env):
     # step
     elements = Chem.GetPeriodicTable()
     def GetValency(element):
+        
         return list(elements.GetValenceList(element))[0]
     
     def Check_Validity(state):
