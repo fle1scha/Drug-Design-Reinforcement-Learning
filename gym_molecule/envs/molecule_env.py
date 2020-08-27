@@ -86,17 +86,13 @@ class MoleculeEnvironment(gym.Env):
             conformers >= self.conformers
         )
 
-        if not done:
-            reward = calculateReward()
-        else:
+        if done:
             reward = 0
+        else:
+            reward = self.CalculateReward()
         
         return np.array(self.state), reward, done, {}
 
-
-    def calculateReward():
-        # OUT OF SCOPE
-        pass
 
     def reset(self):
         self.state = self.np_random.uniform(low=0, high=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
@@ -129,16 +125,16 @@ class MoleculeEnvironment(gym.Env):
     # step
     elements = Chem.GetPeriodicTable()
     def GetValency(element):
-        
         return list(elements.GetValenceList(element))[0]
     
     def Check_Validity(state):
+        print("checking Validity")
         valid = True
         return valid
     
-    def Get_reward():
-        reward = 1
-        return reward
+    def CalculateReward(self):
+        print("calculating Reward")
+        return 1
         
     
     # 
