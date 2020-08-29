@@ -28,6 +28,10 @@ class MoleculeEnvironment(gym.Env):
         5     Remove Conformer
     """
     def __init__(self):
+        """
+        The __init_ method for an env object.
+        @parameters self:gym.Env
+        """
 
         self.molecule = Chem.MolFromSmiles("C=C-C-C=C-C-O")
         
@@ -53,6 +57,12 @@ class MoleculeEnvironment(gym.Env):
    
    
     def step(self, action):
+        """
+        The step method considers the current state of the environment, and the chosen action of the agent, to adjust the env's 
+        state accordingly.
+        @parameters self:gym.Env, action: int 
+        @returns np.array(self.state), reward, done
+        """
         
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
@@ -95,19 +105,34 @@ class MoleculeEnvironment(gym.Env):
 
 
     def reset(self):
+        """
+        The reset method refreshes the state of the environment.
+        @parameters self: gym.env
+        @returns np.array(self.state)
+        """
         self.state = self.np_random.uniform(low=0, high=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
         return np.array(self.state)
 
     def render(self):
+        """
+        The render method allows the user to intepret/visualise the env's change in state.
+        @parameters self: gym.env
+        @return [not yet defined]
+        """
         return Chem.MolFromSmiles('C1OC1')
 
     def seed(self, seed=None):
+        """
+        The seed method maintains pseudo-random number generation to use throughout the training environment.
+        @parameters self: gym.env, seed: float
+        @returns seed
+        """
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
     
     
     
-    # PROTOTYPE CODE methods 
+    """The below methods are still in development and are not needed to demonstrate the functionality of our prototype."""
     
     # init
     def Get_possible_Atoms():
