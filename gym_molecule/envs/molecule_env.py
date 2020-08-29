@@ -49,6 +49,16 @@ class MoleculeEnvironment(gym.Env):
         #The action_space is defined. 
         self.action_space = spaces.Discrete(6)
         
+        
+        # Get the possible atoms to add to the molecule
+        self.atom_space = self.Get_possible_Atoms()
+        
+        # Get the possible actions that the Agent can take
+        self.action_options = self.Get_possible_Actions()
+        
+        # Get the possible atoms to add to the molecule
+        self.bond_space = self.Get_possible_Bonds()
+        
         #The observation_space is defined.
         self.observation_space = spaces.Box(0, high, dtype=np.float32)
 
@@ -135,24 +145,24 @@ class MoleculeEnvironment(gym.Env):
     """The below methods are still in development and are not needed to demonstrate the functionality of our prototype."""
     
     # init
-    def Get_possible_Atoms():
+    def Get_possible_Atoms(self):
         atoms = ['C', 'N', 'O', 'S', 'Cl'] 
         return atoms
     
-    def Get_possible_Bonds():
+    def Get_possible_Bonds(self):
         bonds = ["double", "Single", "Triple"]
         return bonds
     
-    def Get_possible_actions():
+    def Get_possible_Actions(self):
         actions = [0,1,2,3,4,5]
         return 
     
     # step
     elements = Chem.GetPeriodicTable()
-    def GetValency(element):
+    def GetValency(self, element):
         return list(elements.GetValenceList(element))[0]
     
-    def Check_Validity(state):
+    def Check_Validity(self, state):
         print("checking Validity")
         valid = True
         return valid
@@ -162,6 +172,3 @@ class MoleculeEnvironment(gym.Env):
         return 1
         
     
-    # 
-    
-    ## LUKE COMMENT
