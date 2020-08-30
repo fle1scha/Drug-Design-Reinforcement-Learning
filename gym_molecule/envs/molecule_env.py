@@ -11,11 +11,12 @@ import numpy as np
 class MoleculeEnvironment(gym.Env):
     """
     Observation:
-        Type: Box(4)
+        Type: Box(3)
         Num     Observation               Min          Max
         0       Number of Atoms           0            Number of Atoms in Molecule
         1       Number of Bonds           0            Number of Bonds in Molecule
         2       Number of Conformers      0            Number of Conformers in Molecule
+        
         
     Actions:
         Type: Discrete(6)
@@ -27,6 +28,7 @@ class MoleculeEnvironment(gym.Env):
         4     Add Conformer
         5     Remove Conformer
     """
+    
     def __init__(self):
         """
         The __init_ method for an env object.
@@ -35,20 +37,35 @@ class MoleculeEnvironment(gym.Env):
 
         self.molecule = Chem.MolFromSmiles("C=C-C-C=C-C-O")
         
-        #Set observation_space values based on self.molecule
+        
+        # Set observation_space values based on self.molecule
         self.atoms = self.molecule.GetNumAtoms()
         self.bonds = self.molecule.GetNumBonds()
         self.conformers = self.molecule.GetNumConformers()
+        
+        print("Optimisation goal:")
+        print("C=C-C-C=C-C-O")
+        print("A:", self.atoms)
+        print("B:", self.bonds)
+        print("C:", self.conformers)
+        print()
+        
+        
 
-        #The high (max) values for the observation_space values
+        # The high (max) values for the observation_space values
         high = np.array([self.atoms,
                         self.bonds,
                         self.conformers],
                         dtype=np.float32)
-
-        #The action_space is defined. 
+        
+        # The action_space is defined. 
         self.action_space = spaces.Discrete(6)
         
+        # The observation_space is defined.
+        self.observation_space = spaces.Box(0, high, dtype=np.float32)
+
+        # The following methods are just hollow method calls. They will be implemented as the prototype evolves.
+        #----------------------------------------------------
         
         # Get the possible atoms to add to the molecule
         self.atom_space = self.Get_possible_Atoms()
@@ -59,9 +76,8 @@ class MoleculeEnvironment(gym.Env):
         # Get the possible atoms to add to the molecule
         self.bond_space = self.Get_possible_Bonds()
         
-        #The observation_space is defined.
-        self.observation_space = spaces.Box(0, high, dtype=np.float32)
-
+        #-----------------------------------------------------
+        
         self.seed()
         self.state = None
    
@@ -74,12 +90,13 @@ class MoleculeEnvironment(gym.Env):
         @returns np.array(self.state), reward, done
         """
         
+        #Assert the validity of the agent's action. 
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
 
         atoms, bonds, conformers = self.state
         
-        #This switch determines how the environment changes given the agent's action. 
+        # This switch determines how the environment changes given the agent's action. 
         if action == 0:
             atoms += 1
         elif action == 1:
@@ -93,10 +110,10 @@ class MoleculeEnvironment(gym.Env):
         else:
             conformers += 1
 
-        #The observation state of the env is refreshed.
+        # The observation state of the env is refreshed.
         self.state = (atoms, bonds, conformers)
         
-        #In order to fix each Episode only iterating once. We must ensure this doesn't evaluate to true after one iteration.
+        # Evaluate the terminality of the environment state. This aligns with the optimisation goal.
         done = bool(
             atoms < 0 or
             atoms >= self.atoms or
@@ -105,11 +122,17 @@ class MoleculeEnvironment(gym.Env):
             conformers < 0 or
             conformers >= self.conformers
         )
-
+        
+        #For prototyping purposes.
+        done = False
+        
+        validity = self.Check_Validity()
+        valency = self.GetValency()
+        
         if done:
             reward = 0
         else:
-            reward = self.CalculateReward()
+            reward = self.CalculateReward(validity, valency)
         
         return np.array(self.state), reward, done, {}
 
@@ -120,7 +143,12 @@ class MoleculeEnvironment(gym.Env):
         @parameters self: gym.env
         @returns np.array(self.state)
         """
-        self.state = self.np_random.uniform(low=0, high=min(self.atoms, self.bonds, self.conformers)/2, size=(3,))
+        
+        self.state = self.np_random.randint(low=0, high=(max(self.atoms, self.bonds, self.conformers)/2), size=(3,))
+        print("Env original state: ")
+        print(self.state)
+        print()
+        
         return np.array(self.state)
 
     def render(self):
@@ -129,7 +157,7 @@ class MoleculeEnvironment(gym.Env):
         @parameters self: gym.env
         @return [not yet defined]
         """
-        return Chem.MolFromSmiles('C1OC1')
+        return Chem.MolFromSmiles('C=C-C-C=C-C-O')
 
     def seed(self, seed=None):
         """
@@ -144,7 +172,7 @@ class MoleculeEnvironment(gym.Env):
     
     """The below methods are still in development and are not needed to demonstrate the functionality of our prototype."""
     
-    # init
+    # __init__ method sub methods.
     def Get_possible_Atoms(self):
         atoms = ['C', 'N', 'O', 'S', 'Cl'] 
         return atoms
@@ -157,18 +185,20 @@ class MoleculeEnvironment(gym.Env):
         actions = [0,1,2,3,4,5]
         return 
     
-    # step
+    # step method sub methods.
     elements = Chem.GetPeriodicTable()
-    def GetValency(self, element):
-        return list(elements.GetValenceList(element))[0]
+    def GetValency(self):
+        print("... Calculating molecular valency.")
+        return 1
     
-    def Check_Validity(self, state):
-        print("checking Validity")
+    def Check_Validity(self):
+        print("... Checking molecular validity.")
         valid = True
         return valid
     
-    def CalculateReward(self):
-        print("calculating Reward")
+    
+    def CalculateReward(self, validity, valency):
+        print("... Calculating reward based on chemical validity and molecule valency.")
         return 1
         
     
