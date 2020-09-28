@@ -30,8 +30,10 @@ class MoleculeEnvironment(gym.Env):
         5     Remove Conformer
     """
     def __init__(self):
-
-        self.molecule = Mol('F', 'FC(F)(Cl)')
+        self.goal = input("Enter The Optimisation goal: \n eg 'FC(F)(Cl)C(F)(Cl)Cl'")
+        self.mol = input("Enter the starting molecule or atom: \n" )
+        self.molecule = Mol(self.mol, self.goal)
+        self.molecule.GetRandomGoal()
         
         high = np.array([len(self.molecule.get_Atoms()),
                         len(self.molecule.get_Bonds())],
@@ -39,8 +41,10 @@ class MoleculeEnvironment(gym.Env):
         
         # The action_space is defined. 
         self.action_space = spaces.Discrete(6)
+        # Atom space determined from the goals atoms
         self.atom_space = self.molecule.get_Atoms()
-        
+        # Bond space based on goal, float values 1.0, 2.0, 1.5
+        self.bond_space = self.molecule.get_Bonds()
         # The observation_space is defined.
         self.observation_space = spaces.Box(0,high,dtype=np.float32)
 
@@ -54,17 +58,16 @@ class MoleculeEnvironment(gym.Env):
         assert self.action_space.contains(action), err_msg
         
         #This switch determines how the environment changes given the agent's action. 
-        if action == 0: # Add random atom 
+        if action == 0:                                     # 0: Add random atom 
             self.molecule.AddA(rd.choice(self.atom_space))
-            self.molecule.CheckValidity() # if false: mol will revert
-                               
-        elif action == 1: # Revert back to previous state
+            self.molecule.CheckValidity()                   # if false: mol will revert                        
+        elif action == 1:                                   # 1: Revert back to previous state
             self.molecule.revertMol()                      
         elif action == 2:
             self.molecule.AddA("C")
             self.molecule.CheckValidity()
         elif action == 3:
-                print("3")
+                print("3")                                  # Could add bonds, specific mols based on weighting of MDP
         elif action == 4:
                 print("4")
         else:
@@ -74,7 +77,7 @@ class MoleculeEnvironment(gym.Env):
         self.state = self.molecule.GetSimilarity()
         
         #In order to fix each Episode only iterating once. We must ensure this doesn't evaluate to true after one iteration.
-        done = bool(False)
+        done = bool(self.molecule.GetSimilarity() == 100.00)
 
         if done:
             reward = 0
@@ -89,7 +92,7 @@ class MoleculeEnvironment(gym.Env):
         return np.array(self.state)
 
     def render(self):
-        return Chem.MolFromSmiles('C1OC1')
+        return self.molecule.GetMol()
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
