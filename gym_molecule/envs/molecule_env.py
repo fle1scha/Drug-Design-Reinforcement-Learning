@@ -92,7 +92,7 @@ class MoleculeEnvironment(gym.Env):
         return np.array(self.state)
 
     def render(self):
-        return self.molecule.GetMol()
+        self.molecule.GetMol()
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
