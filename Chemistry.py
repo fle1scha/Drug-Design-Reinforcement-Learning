@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from rdkit import Chem, DataStructs
+from rdkit.Chem import Draw
 import random
 
 
@@ -9,8 +10,8 @@ class Mol:
         # Set instance variables
         self.mol = mol
         self.goal = goal
-        self.RAM = [mol,mol]
-        self.bondmap = {"1.0":"Single"}
+        self.RAM = [mol, mol, mol]
+        self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"}
         
         #  Connect library if present
         if os.path.isfile('./MoleculeLibrary.csv'):
@@ -24,8 +25,8 @@ class Mol:
         if self.present:
             randomMol = self.df.sample()
             self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type 
-            self.mol = self.get_Atoms()[0]          # Use different initial molecule
-            self.RAM = [self.mol,self.mol]
+            self.mol = self.get_Atoms()[0]                      # Use different initial molecule
+            self.RAM = [self.mol,self.mol,self.mol]
             return randomMol['Compound ID']
         else:
             return False
@@ -46,21 +47,25 @@ class Mol:
         return list(bonds)
     
      # Adding an Atom to the molecule
-    def AddA(self, Atom):
+    def AddA(self, Atom, back):
         self.updateRAM(self.mol)
-        newmol = self.mol + Atom
+        if back:
+            newmol = self.mol + Atom
+        else: 
+            newmol =  Atom + self.mol 
         self.mol = newmol
         
     # The memory for recovering past states of the molecule
     def updateRAM(self, old):
+        self.RAM[2] = self.RAM[1]
         self.RAM[1] = self.RAM[0]
         self.RAM[0] = old
         
     # Restore molecule to previous state
     def revertMol(self):
-        self.mol = self.RAM[1]
-        self.RAM[1] = self.RAM[0]
-        self.RAM[0] = self.mol
+        self.mol = self.RAM[0]
+        self.RAM[1] = self.RAM[2]
+        self.RAM[0] = self.RAM[1]
                      
     # Return the last two states
     def history(self):
@@ -84,11 +89,14 @@ class Mol:
     
      # The Taninoto Similarity   
     def GetSimilarity(self):
-        mol1 = Chem.MolFromSmiles(self.mol)
-        mol2 = Chem.MolFromSmiles(self.goal)
-        fingerprint1 = Chem.RDKFingerprint(mol1)
-        fingerprint2 = Chem.RDKFingerprint(mol2)
-        return round(DataStructs.TanimotoSimilarity(fingerprint1,fingerprint2) *100, 4) 
+        if self.CheckValidity():
+            mol1 = Chem.MolFromSmiles(self.mol)
+            mol2 = Chem.MolFromSmiles(self.goal)
+            fingerprint1 = Chem.RDKFingerprint(mol1)
+            fingerprint2 = Chem.RDKFingerprint(mol2)
+            return round(DataStructs.TanimotoSimilarity(fingerprint1,fingerprint2) *100, 4) 
+        else:
+            return -1
     
     # Current and Previous state of the Mol
     def DisplayChanges(self):
