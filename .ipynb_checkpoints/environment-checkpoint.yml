@@ -1,0 +1,18 @@
+name: mol-env
+channels:
+  - defaults
+  - anaconda
+  - rdkit
+dependencies:
+  - python=3.7.7
+  - pip
+  - rdkit
+  - sphinx
+  - flake8
+  - pytest
+  - pytest-cov
+  - import_ipynb
+  - pip:
+    - gym
+    - rstcheck
+prefix: C:\tools\Anaconda3\envs\mol-env
