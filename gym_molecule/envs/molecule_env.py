@@ -34,6 +34,8 @@ class MoleculeEnvironment(gym.Env):
         if self.goal == "1": 
             self.molecule = Mol("F", "F")
             self.molecule.GetRandomGoal()
+            self.mol = self.molecule.mol
+            self.goal = self.molecule.goal
         else:
             self.mol = input("Enter the starting molecule or atom: \n" )
             self.molecule = Mol(self.mol, self.goal)
@@ -107,7 +109,9 @@ class MoleculeEnvironment(gym.Env):
 
 
     def reset(self):
-        self.__init__()
+        self.molecule.goal = self.goal
+        self.molecule.mol = self.mol
+        self.molecule.modifications = []
 
     def render(self):
         self.molecule.GetMol()
