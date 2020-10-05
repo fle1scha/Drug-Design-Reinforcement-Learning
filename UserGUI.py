@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as msg
+import gym
+from gym import wrappers, logger
+from MoleculeAgent import MoleculeAgent
 
 
 class GUI(tk.Frame):
@@ -43,7 +46,7 @@ class GUI(tk.Frame):
         # 2. Goals Frame
         # ----------------------------
 
-        self.goal_frame = tk.LabelFrame(self, bg = "blue")
+        self.goal_frame = tk.LabelFrame(self, bg="blue")
         self.goal_frame.grid(row=1)
 
         goalDropDownLabel = tk.Label(self.goal_frame, text="Optimisation goals")
@@ -51,14 +54,15 @@ class GUI(tk.Frame):
 
         # Preset Goal
         self.goalvalue = tk.StringVar()
+
         self.goal_chosen = ttk.Combobox(self.goal_frame, width=20, textvariable=self.goalvalue)
+
         self.goal_chosen["values"] = self.df
         self.goal_chosen.grid(column=1, row=1)
         self.goal_chosen.current(0)
 
         # Goal Button
-        self.goalButton = tk.Button(self.goal_frame, text="START")
-        self.goalButton["command"] = self.setgoal
+        self.goalButton = tk.Button(self.goal_frame, text="START", command=self.start)
         self.goalButton.grid(column=2, row=1)
         # self.goalButton.pack()
 
@@ -102,8 +106,8 @@ class GUI(tk.Frame):
         reward.grid(row=1, column=2)
 
         # Quit Button
-        quit = tk.Button(self.output_frame, text="QUIT", bg='black', command=self.master.destroy)
-        quit.grid(row=3, column=1)
+        self.quit = tk.Button(self.output_frame, text="QUIT", bg='black', command=self.master.destroy)
+        self.quit.grid(row=3, column=1)
 
         # ------------------------
 
@@ -113,60 +117,69 @@ class GUI(tk.Frame):
     -------------------
     """
 
-    def setgoal(self):
-
+    def start(self):
+        self.goalvalue = self.goal_chosen.get()
         if self.goalButton["text"] == "START":
-
-
-
-            if self.goalvalue.get() == "":
+            print(self.goalvalue)
+            
+            # @Jesse, this is where I'm having my error. If I enter an empty goal once, this evaluates to true even
+            # if I change it. It is defined in line 56 and assigned to the combo box in line 58.
+            if self.goalvalue == "":
 
                 msg.showinfo("TEDD State Information", "You must enter an optimisation goal.")
             else:
                 self.goal_chosen["state"] = 'disabled'
                 self.restartButton["state"] = 'normal'
                 self.goalButton["text"] = "PAUSE"
-                return self.goalvalue.get()
+
 
         elif self.goalButton["text"] == "PAUSE":
-            self.paused = True
-            self.goalButton["text"] = "RESUME"
-
+            self.pause()
         elif self.goalButton["text"] == "RESUME":
-            self.paused = False
-            self.goalButton["text"] = "PAUSE"
+            self.resume()
+
+    def pause(self):
+        print("PAUSE")
+        self.paused = True
+        self.goalButton["text"] = "RESUME"
+
+    def resume(self):
+        print("RESUME")
+        self.paused = False
+        self.goalButton["text"] = "PAUSE"
 
     def restart(self):
-        self.paused = True
+        self.pause()
+
         answer = msg.askyesno('TEDD State Information', "Are you sure you wish to reset the environment?")
 
         if answer:
             self.goal_chosen["state"] = 'normal'
             self.restartButton['state'] = 'disabled'
-            answer = msg.askyesno('TEDD State Information', "Do you want to save the environment's lifespan to your "
-                                                            "directory?")
+            save = msg.askyesno('TEDD State Information', "Do you want to save the environment's lifespan to your "
+                                                          "directory?")
 
-            if answer:
+            if save:
                 msg.showinfo('TEDD State Information', "The environment's lifespan has been saved in your directory.")
                 self.goalButton["text"] = "START"
-                self.goalvalue = ""
+                self.goalvalue = tk.StringVar("")
                 return True
-            if not answer:
+            if not save:
                 msg.showinfo('TEDD State Information', "The environment has reset.")
                 self.goalButton["text"] = "START"
-                self.goalvalue = ""
+                self.goalvalue = tk.StringVar("")
 
                 return False
 
         if not answer:
-            self.paused = False
+            self.resume()
 
         # publish list
 
     def invalidMol(self):
         msg.showerror('TEDD State Information', "You have entered an invalid molecule.")
 
-        self.goalvalue = ""
+        self.goalvalue = tk.StringVar("")
         self.goalButton["text"] = "START"
         self.restartButton["state"] = "disabled"
 
@@ -188,7 +201,6 @@ class GUI(tk.Frame):
     def set_agentaction(self, value):
         self.agentAction.set(value)
 
-
     def getPaused(self):
         return self.state
 
@@ -196,14 +208,12 @@ class GUI(tk.Frame):
         self.df = df
 
 
-
-#Creat a new GUI
+# Create
 root = tk.Tk()
 root.geometry('500x400')
 root.resizable(False, False)
 
 root.title("TEDD.exe")
-
 app = GUI(master=root)
 app.goal_chosen.focus()
 app.mainloop()
