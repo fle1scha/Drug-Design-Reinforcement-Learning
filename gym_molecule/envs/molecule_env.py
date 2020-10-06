@@ -105,6 +105,7 @@ class MoleculeEnvironment(gym.Env):
             self.molecule.GetRandomGoal()
         else:
             self.molecule = Mol(mol,goal)
+            self.molecule.CheckGoal()
             
         self.mol = self.molecule.mol
         self.goal = self.molecule.goal

@@ -90,6 +90,17 @@ class Mol:
             return False
         else:
             return True
+        
+    def CheckGoal(self):
+        try:
+            molecule = Chem.MolFromSmiles(self.goal)
+            smiles = Chem.MolToSmiles(molecule, isomericSmiles=True)
+            mol2 = Chem.MolFromSmiles(smiles)
+        except:
+            print("invalid Goal: choosing a random one from SMILES dataset.")
+            self.GetRandomGoal()
+        else:
+            pass
     
      # The Taninoto Similarity   
     def GetSimilarity(self):
