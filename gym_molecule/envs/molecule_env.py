@@ -29,8 +29,35 @@ class MoleculeEnvironment(gym.Env):
         4     Add Conformer
         5     Remove Conformer
     """
-    def __init__(self):
-        pass
+ 
+    def __init__(self, mol, goal):
+        if goal == "1": 
+            self.molecule = Mol("F", "F")
+            self.molecule.GetRandomGoal()
+        else:
+            self.molecule = Mol(mol,goal)
+            self.molecule.CheckGoal()
+            
+        self.mol = self.molecule.mol
+        self.goal = self.molecule.goal
+        
+        high = np.array([len(self.molecule.get_Atoms()),
+                        len(self.molecule.get_Bonds())],
+                        dtype=np.float32)
+          
+            
+            
+        # The action_space is defined. 
+        self.action_space = spaces.Discrete(6)
+        # Atom space determined from the goals atoms
+        self.atom_space = self.molecule.get_Atoms()
+        # Bond space based on goal, float values 1.0, 2.0, 1.5, 3.0
+        self.bond_space = self.molecule.get_Bonds()
+        # The observation_space is defined.
+        self.observation_space = spaces.Box(0,high,dtype=np.float32)
+
+        self.seed()
+        self.state = 0
    
     def step(self, action):   
         err_msg = "%r (%s) invalid" % (action, type(action))
@@ -99,30 +126,4 @@ class MoleculeEnvironment(gym.Env):
         print("calculating Reward")
         return 1
     
-    def SetState(self, mol, goal):
-        if goal == "1": 
-            self.molecule = Mol("F", "F")
-            self.molecule.GetRandomGoal()
-        else:
-            self.molecule = Mol(mol,goal)
-            self.molecule.CheckGoal()
-            
-        self.mol = self.molecule.mol
-        self.goal = self.molecule.goal
-        
-        high = np.array([len(self.molecule.get_Atoms()),
-                        len(self.molecule.get_Bonds())],
-                        dtype=np.float32)
-                
-        # The action_space is defined. 
-        self.action_space = spaces.Discrete(6)
-        # Atom space determined from the goals atoms
-        self.atom_space = self.molecule.get_Atoms()
-        # Bond space based on goal, float values 1.0, 2.0, 1.5, 3.0
-        self.bond_space = self.molecule.get_Bonds()
-        # The observation_space is defined.
-        self.observation_space = spaces.Box(0,high,dtype=np.float32)
-
-        self.seed()
-        self.state = 0
-
+       
