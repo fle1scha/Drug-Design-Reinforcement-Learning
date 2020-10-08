@@ -29,38 +29,41 @@ class MoleculeEnvironment(gym.Env):
         4     Add Conformer
         5     Remove Conformer
     """
-    def __init__(self):
-        self.goal = input("Enter The Optimisation goal: \n eg 'FC(F)(Cl)C(F)(Cl)Cl'")
-        if self.goal == "1": 
+ 
+    def __init__(self, mol, goal):
+        if goal == "1": 
             self.molecule = Mol("F", "F")
             self.molecule.GetRandomGoal()
         else:
-            self.mol = input("Enter the starting molecule or atom: \n" )
-            self.molecule = Mol(self.mol, self.goal)
+            self.molecule = Mol(mol,goal)
+            self.molecule.CheckGoal()
+            
+        self.mol = self.molecule.mol
+        self.goal = self.molecule.goal
         
         high = np.array([len(self.molecule.get_Atoms()),
                         len(self.molecule.get_Bonds())],
                         dtype=np.float32)
-                
+          
+            
+            
         # The action_space is defined. 
         self.action_space = spaces.Discrete(6)
         # Atom space determined from the goals atoms
         self.atom_space = self.molecule.get_Atoms()
-        # Bond space based on goal, float values 1.0, 2.0, 1.5
+        # Bond space based on goal, float values 1.0, 2.0, 1.5, 3.0
         self.bond_space = self.molecule.get_Bonds()
         # The observation_space is defined.
         self.observation_space = spaces.Box(0,high,dtype=np.float32)
 
         self.seed()
         self.state = 0
-        
    
-    def step(self, action):
-        
+    def step(self, action):   
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
         startstate = self.molecule.GetSimilarity()
-        #This switch determines how the environment changes given the agent's action. 
+        # This switch determines how the environment changes given the agent's action
         if action == 0:                                 # 0: Add random atom to back
             self.molecule.AddA(rd.choice(self.atom_space), True)
             self.molecule.CheckValidity() 
@@ -90,7 +93,7 @@ class MoleculeEnvironment(gym.Env):
             
         print(self.molecule.modifications)
 
-        #The observation state of the env is refreshed.
+        # The observation state of the env is refreshed.
         self.state = self.molecule.GetSimilarity()
         if self.state < startstate:
             self.molecule.revertMol()
@@ -107,7 +110,9 @@ class MoleculeEnvironment(gym.Env):
 
 
     def reset(self):
-        self.__init__()
+        self.molecule.goal = self.goal
+        self.molecule.mol = self.mol
+        self.molecule.modifications = []
 
     def render(self):
         self.molecule.GetMol()
@@ -120,4 +125,5 @@ class MoleculeEnvironment(gym.Env):
     def CalculateReward(self):
         print("calculating Reward")
         return 1
-
+    
+       

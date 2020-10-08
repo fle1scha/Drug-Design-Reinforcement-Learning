@@ -51,14 +51,12 @@ class Mol:
     
      # Adding an Atom to the molecule
     def AddA(self, Atom, back):
+        self.modifications.append(Atom)
         self.updateRAM(self.mol)
         if back:
             newmol = self.mol + Atom
         else: 
             newmol =  Atom + self.mol 
-        
-        # MODIFICATION: Luke
-        self.modifications.append(Atom)
         self.mol = newmol
         
     # The memory for recovering past states of the molecule
@@ -92,6 +90,17 @@ class Mol:
             return False
         else:
             return True
+        
+    def CheckGoal(self):
+        try:
+            molecule = Chem.MolFromSmiles(self.goal)
+            smiles = Chem.MolToSmiles(molecule, isomericSmiles=True)
+            mol2 = Chem.MolFromSmiles(smiles)
+        except:
+            print("invalid Goal: choosing a random one from SMILES dataset.")
+            self.GetRandomGoal()
+        else:
+            pass
     
      # The Taninoto Similarity   
     def GetSimilarity(self):
