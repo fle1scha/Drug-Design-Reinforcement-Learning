@@ -8,13 +8,13 @@ import random
 class Mol:    
     def __init__(self, mol, goal):
         # Set instance variables
-        self.mol = mol
-        self.goal = goal
+        self.mol = mol # The starting canvas molecule
+        self.goal = goal # molecule to represent the optimised state
         self.RAM = [mol, mol, mol]
         self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"}
-        
-        # store modifications added
-        self.modifications = []
+         
+        self.modifications = [] # building blocks of the molecule
+        self.storage = []       # Used to pop remove atoms from the molecule
         
         #  Connect library if present
         if os.path.isfile('./MoleculeLibrary.csv'):
@@ -42,6 +42,7 @@ class Mol:
             atoms.add(a.GetSymbol())
         return list(atoms)
     
+    # Returns a list of the possible bonds to construct the mol with 
     def get_Bonds(self):
         molbonds = Chem.MolFromSmiles(self.goal).GetBonds()
         bonds = set() 
@@ -55,9 +56,17 @@ class Mol:
         self.updateRAM(self.mol)
         if back:
             newmol = self.mol + Atom
+            self.storage.append(Atom)
         else: 
             newmol =  Atom + self.mol 
+            self.storage.insert(0,Atom)
         self.mol = newmol
+        
+    # functionality to remove an atom   
+    def RemoveA(self):
+        self.updateRAM(self.mol)
+        self.storage.remove(random.choice(self.storage))
+        self.mol = "".join(self.storage)
         
     # The memory for recovering past states of the molecule
     def updateRAM(self, old):
@@ -70,6 +79,7 @@ class Mol:
         self.mol = self.RAM[0]
         self.RAM[1] = self.RAM[2]
         self.RAM[0] = self.RAM[1]
+        self.modifications.append("Reverted")
                      
     # Return the last two states
     def history(self):

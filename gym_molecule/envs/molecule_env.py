@@ -30,7 +30,9 @@ class MoleculeEnvironment(gym.Env):
         5     Remove Conformer
     """
  
-    def __init__(self, mol, goal):
+    def __init__(self, mol, goal, similarity):
+        self.similarity = similarity       # Float comparison 
+        
         if goal == "1": 
             self.molecule = Mol("F", "F")
             self.molecule.GetRandomGoal()
@@ -99,9 +101,9 @@ class MoleculeEnvironment(gym.Env):
             self.molecule.revertMol()
         
         #In order to fix each Episode only iterating once. We must ensure this doesn't evaluate to true after one iteration.
-        done = bool(self.molecule.GetSimilarity() == 100.00)
+        done = bool(self.molecule.GetSimilarity() >= (self.similarity))
 
-        if done:
+        if done == True:
             reward = 0
         else:
             reward = self.CalculateReward()
@@ -115,7 +117,7 @@ class MoleculeEnvironment(gym.Env):
         self.molecule.modifications = []
 
     def render(self):
-        self.molecule.GetMol()
+        return self.molecule.GetMol()
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -123,7 +125,6 @@ class MoleculeEnvironment(gym.Env):
     
     
     def CalculateReward(self):
-        print("calculating Reward")
-        return 1
+        return "REWARD"
     
        
