@@ -8,6 +8,9 @@ from rdkit.Chem import Draw
 import numpy as np
 import random as rd
 from Chemistry import Mol
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 class MoleculeEnvironment(gym.Env):
@@ -32,10 +35,12 @@ class MoleculeEnvironment(gym.Env):
  
     def __init__(self, mol, goal, similarity):
         self.similarity = similarity       # Float comparison 
-        
+        self.currentReward = 0             # this iterations reward
+        self.validstep = True              # For reward calculation 
         if goal == "1": 
             self.molecule = Mol("F", "F")
-            self.molecule.GetRandomGoal()
+            name = self.molecule.GetRandomGoal()
+            print(name)
         else:
             self.molecule = Mol(mol,goal)
             self.molecule.CheckGoal()
@@ -61,54 +66,50 @@ class MoleculeEnvironment(gym.Env):
         self.seed()
         self.state = 0
    
-    def step(self, action):   
+    def step(self, action): 
+        self.currentReward = 0
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
-        startstate = self.molecule.GetSimilarity()
         # This switch determines how the environment changes given the agent's action
         if action == 0:                                 # 0: Add random atom to back
             self.molecule.AddA(rd.choice(self.atom_space), True)
-            self.molecule.CheckValidity() 
+            self.validstep = self.molecule.CheckValidity() 
             
         elif action == 1:                               # Add random atom to the front
             self.molecule.AddA(rd.choice(self.atom_space), False)
-            self.molecule.CheckValidity()
+            self.validstep = self.molecule.CheckValidity()
             
         elif action == 2:                               # Add random atom with random bond to the back
             bond = self.molecule.bondmap[rd.choice(self.bond_space)]
             bondedatom = bond + rd.choice(self.atom_space)
             self.molecule.AddA(bondedatom, True)
-            self.molecule.CheckValidity()
+            self.validstep = self.molecule.CheckValidity()
             
         elif action == 3:                               # Add random atom with random bond to the front
             bond = self.molecule.bondmap[rd.choice(self.bond_space)]
             bondedatom = rd.choice(self.atom_space) + bond
             self.molecule.AddA(bondedatom, False)    
-            self.molecule.CheckValidity()
+            self.validstep = self.molecule.CheckValidity()
+            
             
         elif action == 4:
-            print("add bracketed atom")
+            # print("add bracketed atom")
             self.molecule.modifications.append("bracketed atom")
         else:
-            print("add ring")
+            # print("add ring")
             self.molecule.modifications.append("ring")
             
-        print(self.molecule.modifications)
-
-        # The observation state of the env is refreshed.
         self.state = self.molecule.GetSimilarity()
-        if self.state < startstate:
-            self.molecule.revertMol()
         
         #In order to fix each Episode only iterating once. We must ensure this doesn't evaluate to true after one iteration.
         done = bool(self.molecule.GetSimilarity() >= (self.similarity))
 
         if done == True:
-            reward = 0
+            reward = 100
         else:
             reward = self.CalculateReward()
         
-        return np.array(self.state), reward, done, {}
+        return np.array(self.state), reward, done, self.molecule.modifications
 
 
     def reset(self):
@@ -117,7 +118,16 @@ class MoleculeEnvironment(gym.Env):
         self.molecule.modifications = []
 
     def render(self):
-        return self.molecule.GetMol()
+        if self.molecule.CheckValidity() == True:
+            SMILES = self.molecule.GetMol()
+            Image = Draw.MolToImage(SMILES, size=(300, 300))
+            npFormat = np.asarray(Image)
+            plt.imshow(npFormat)
+            plt.draw()
+            plt.pause(0.5) # pause how many seconds
+            plt.close()
+        else:
+            print("Cannot render this molecule")
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -125,6 +135,11 @@ class MoleculeEnvironment(gym.Env):
     
     
     def CalculateReward(self):
-        return "REWARD"
+        if self.validstep == False:
+            self.currentReward -= 10   # invalid penalty
+        return self.currentReward
+    
+    def updatepolicy(self):
+        return "policy received from agent"
     
        

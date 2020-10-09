@@ -3,7 +3,7 @@ import os
 from rdkit import Chem, DataStructs
 from rdkit.Chem import Draw
 import random
-
+# TODO: original atom included
 
 class Mol:    
     def __init__(self, mol, goal):
@@ -13,8 +13,8 @@ class Mol:
         self.RAM = [mol, mol, mol]
         self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"}
          
-        self.modifications = [] # building blocks of the molecule
-        self.storage = []       # Used to pop remove atoms from the molecule
+        self.modifications = []    # building blocks of the molecule
+        self.storage = [mol]       # Used to pop remove atoms from the molecule
         
         #  Connect library if present
         if os.path.isfile('./MoleculeLibrary.csv'):
@@ -30,7 +30,9 @@ class Mol:
             self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type 
             self.mol = self.get_Atoms()[0]                      # Use different initial molecule
             self.RAM = [self.mol,self.mol,self.mol]
+            self.storage = [self.mol]
             return randomMol['Compound ID']
+        
         else:
             return False
      
@@ -53,7 +55,7 @@ class Mol:
      # Adding an Atom to the molecule
     def AddA(self, Atom, back):
         self.modifications.append(Atom)
-        self.updateRAM(self.mol)
+        self.updateRAM(self.storage)
         if back:
             newmol = self.mol + Atom
             self.storage.append(Atom)
@@ -63,9 +65,9 @@ class Mol:
         self.mol = newmol
         
     # functionality to remove an atom   
-    def RemoveA(self):
-        self.updateRAM(self.mol)
-        self.storage.remove(random.choice(self.storage))
+    def RemoveA(self,index):
+        self.updateRAM(self.storage)
+        self.storage.pop(index)
         self.mol = "".join(self.storage)
         
     # The memory for recovering past states of the molecule
@@ -77,8 +79,10 @@ class Mol:
     # Restore molecule to previous state
     def revertMol(self):
         self.mol = self.RAM[0]
+        self.storage = self.RAM[0]
         self.RAM[1] = self.RAM[2]
         self.RAM[0] = self.RAM[1]
+        self.mol = "".join(self.mol)
         self.modifications.append("Reverted")
                      
     # Return the last two states
@@ -105,9 +109,7 @@ class Mol:
         try:
             molecule = Chem.MolFromSmiles(self.goal)
             smiles = Chem.MolToSmiles(molecule, isomericSmiles=True)
-            mol2 = Chem.MolFromSmiles(smiles)
         except:
-            print("invalid Goal: choosing a random one from SMILES dataset.")
             self.GetRandomGoal()
         else:
             pass
