@@ -15,6 +15,57 @@ import matplotlib.pyplot as plt
 
 class MoleculeEnvironment(gym.Env):
     """
+    A class used to create a molecule environment.
+    ...
+
+    Attributes
+    ----------
+    similarity : float
+
+    currentReward : int
+
+    validStep : Boolean
+
+    molecule : Mol object
+
+    mol : Chem.Mol object
+
+    goal : Chem.Mol object
+
+    self.action_space : spaces.Discrete(6)
+
+    self.atom_space : list
+
+    self.bond_space : list
+
+    self.observation_space : spaces.Box()
+
+    self.state : int
+
+    Methods
+    ----------
+    __init__(self, mol, goal, similarity)
+        The constructor method for this class. Called when gym.make() is called.
+
+    step(self, action)
+        Used to update the environment's state given an action from the agent.
+
+    reset(self)
+        Resets the environment's state.
+
+    render(self)
+        Graphically shows the environment's current state.
+
+    seed(self, seed=None)
+        Used to set a pseudo-random seed for the environment.
+
+    CalculateReward(self)
+        Determines the reward to be returned to the agent.
+
+    updatepolicy(self)
+        Changes the policy of the agent.
+    """
+    """
     Observation:
         Type: Box(4)
         Num     Observation               Min          Max
@@ -34,6 +85,19 @@ class MoleculeEnvironment(gym.Env):
     """
  
     def __init__(self, mol, goal, similarity):
+        """
+        Parameters
+        ----------
+        mol : Chemistry.Mol object
+            The starting molecule of the environment.
+
+        goal: Chemistry.Mol object
+            The optimisation goal of the environment (and the agent).
+
+        similarity : float
+            The percentage similarity of the mol to the goal, represented as a float.
+        """
+
         self.similarity = similarity       # Float comparison 
         self.currentReward = 0             # this iterations reward
         self.validstep = True              # For reward calculation 
@@ -66,7 +130,18 @@ class MoleculeEnvironment(gym.Env):
         self.seed()
         self.state = 0
    
-    def step(self, action): 
+    def step(self, action):
+        """
+        The method to advance the environment by one step. A step takes in the agent's action
+        and changes the environment's state accordingly.
+
+        Parameters
+        ----------
+        action : int
+            The action selected by the agent given the previous reward.
+
+
+        """
         self.currentReward = 0
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
