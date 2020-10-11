@@ -30,9 +30,22 @@ class MoleculeAgent:
 
         Parameters
         __________
-        observation : 
+        observation : list
+            The current observation state of the environment.
 
+        reward : int
+            The environment's reward to the agent.
+
+        done : Boolean
+            Whether or not the environment has reached its optimisation goal.
+
+        Returns
+        __________
+        action : int
+            The chosen action of the agent, given its policy.
         """
+        
         #determine simply policy
-        return self.action_space.sample()
+        action = self.action_space.sample()
+        return action
 
