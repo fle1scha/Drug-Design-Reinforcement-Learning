@@ -10,7 +10,7 @@ class Mol:
         # Set instance variables
         self.mol = mol # The starting canvas molecule
         self.goal = goal # molecule to represent the optimised state
-        self.RAM = [mol, mol, mol]
+        self.RAM = [[mol], [mol], [mol]]
         self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"}
          
         self.modifications = []    # building blocks of the molecule
@@ -29,8 +29,8 @@ class Mol:
             randomMol = self.df.sample()
             self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type 
             self.mol = self.get_Atoms()[0]                      # Use different initial molecule
-            self.RAM = [self.mol,self.mol,self.mol]
             self.storage = [self.mol]
+            self.RAM = [self.storage,self.storage,self.storage]
             return randomMol['Compound ID']
         
         else:
@@ -78,11 +78,10 @@ class Mol:
         
     # Restore molecule to previous state
     def revertMol(self):
-        self.mol = self.RAM[0]
+        self.mol = "".join(self.RAM[0])
         self.storage = self.RAM[0]
-        self.RAM[1] = self.RAM[2]
         self.RAM[0] = self.RAM[1]
-        self.mol = "".join(self.mol)
+        self.RAM[1] = self.RAM[2]
         self.modifications.append("Reverted")
                      
     # Return the last two states

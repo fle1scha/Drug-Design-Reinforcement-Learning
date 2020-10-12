@@ -118,13 +118,13 @@ class MoleculeEnvironment(gym.Env):
         self.molecule.modifications = []
 
     def render(self):
-        if self.molecule.CheckValidity() == True:
+        if self.validstep == True:
             SMILES = self.molecule.GetMol()
             Image = Draw.MolToImage(SMILES, size=(300, 300))
             npFormat = np.asarray(Image)
             plt.imshow(npFormat)
             plt.draw()
-            plt.pause(0.5) # pause how many seconds
+            plt.pause(0.25) # pause how many seconds
             plt.close()
         else:
             print("Cannot render this molecule")
