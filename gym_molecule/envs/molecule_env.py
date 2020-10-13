@@ -15,6 +15,68 @@ import matplotlib.pyplot as plt
 
 class MoleculeEnvironment(gym.Env):
     """
+    A class used to create a molecule environment.
+    ...
+
+    Attributes
+    ----------
+    similarity : float
+        The similarity between two Mol objects, as a float.
+
+    currentReward : int
+        The current reward to the agent.
+
+    validStep : Boolean
+        True if the agent's action is valid.
+
+    molecule : Mol object
+        A user created class to hold the building methods for the environment mol object.
+
+    mol : Chem.Mol object
+        The current build state of the environment's molecule.
+
+    goal : Chem.Mol object
+        The optimisation state of the environment's molecule.
+
+    self.action_space : spaces.Discrete(6)
+        The action space of the environment.
+
+    self.atom_space : list
+        The atom space - a list of atoms contained in the goal.
+
+    self.bond_space : list
+        The bond space - a list of bonds that exist in the goal.
+
+    self.observation_space : spaces.Box()
+        The environment's observation space.
+
+    self.state : float
+        The current similarity of the current mol and the goal mol.
+
+    Methods
+    ----------
+    __init__(self, mol, goal, similarity)
+        The constructor method for this class. Called when gym.make() is called.
+
+    step(self, action)
+        Used to update the environment's state given an action from the agent.
+
+    reset(self)
+        Resets the environment's state.
+
+    render(self)
+        Graphically shows the environment's current state.
+
+    seed(self, seed=None)
+        Used to set a pseudo-random seed for the environment.
+
+    CalculateReward(self)
+        Determines the reward to be returned to the agent.
+
+    updatepolicy(self)
+        Changes the policy of the agent.
+    """
+    """
     Observation:
         Type: Box(4)
         Num     Observation               Min          Max
@@ -34,6 +96,19 @@ class MoleculeEnvironment(gym.Env):
     """
  
     def __init__(self, mol, goal, similarity):
+        """
+        Parameters
+        ----------
+        mol : str
+            The starting molecule of the environment.
+
+        goal: str
+            The optimisation goal of the environment (and the agent).
+
+        similarity : float
+            The percentage similarity of the mol to the goal, represented as a float.
+        """
+
         self.similarity = similarity       # Float comparison 
         self.currentReward = 0             # this iterations reward
         self.validstep = True              # For reward calculation 
@@ -66,7 +141,28 @@ class MoleculeEnvironment(gym.Env):
         self.seed()
         self.state = 0
    
-    def step(self, action): 
+    def step(self, action):
+        """The method to advance the environment by one step. A step takes in the agent's action and changes the environment's state accordingly.
+
+        Parameters
+        ----------
+        action : int
+            The action selected by the agent given the previous reward.
+
+        Returns
+        ----------
+        np.array(self.state)
+            A numpy array of the state of the environment the done boolean.
+
+        reward
+            The reward to the agent.
+        done
+            The done boolean - it hows whether the environment has reached its goal.
+
+        self.molecule.modifications
+             The array of valid modifications for the agent.
+        """
+
         self.currentReward = 0
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
@@ -113,11 +209,17 @@ class MoleculeEnvironment(gym.Env):
 
 
     def reset(self):
+        """Resets the state of the environment.
+        """
+        
         self.molecule.goal = self.goal
         self.molecule.mol = self.mol
         self.molecule.modifications = []
 
     def render(self):
+      """Graphically renders the current state of the environment.
+        """
+      
         if self.validstep == True:
             SMILES = self.molecule.GetMol()
             Image = Draw.MolToImage(SMILES, size=(300, 300))
@@ -130,16 +232,46 @@ class MoleculeEnvironment(gym.Env):
             print("Cannot render this molecule")
 
     def seed(self, seed=None):
+        """Sets a pseudo-random seed for the environment.
+
+        Parameters
+        ----------
+        seed : int, optional
+            The seed value for the environment. None is the default.
+
+        Returns
+        ----------
+        [seed] : int
+            The pseudo-random number that is generated given the seed value.
+        """
+
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
     
     
     def CalculateReward(self):
+        """Returns the current reward, unless the step is invalid.
+
+        Returns
+        ----------
+        self.currentReward : int
+            The reward that will be given to the agent.
+        """
+
         if self.validstep == False:
             self.currentReward -= 10   # invalid penalty
         return self.currentReward
     
     def updatepolicy(self):
-        return "policy received from agent"
+        """Shows that the policy of the agent has been updated.
+
+        Returns
+        ----------
+        policy_str : str
+            Confirmation message of the change.
+        """
+
+        policy_str = "policy received from agent"
+        return policy_str
     
        
