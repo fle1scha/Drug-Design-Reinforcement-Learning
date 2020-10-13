@@ -25,7 +25,6 @@ Activate environment:
 ```
 conda activate mol-env
 ```
-
 ## Getting started
 To get a working gym environment all that's needed is to use the provided repository structure 
 (see [here](https://github.com/openai/gym/blob/master/docs/creating-environments.md)):

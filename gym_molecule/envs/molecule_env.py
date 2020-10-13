@@ -99,10 +99,10 @@ class MoleculeEnvironment(gym.Env):
         """
         Parameters
         ----------
-        mol : Chemistry.Mol object
+        mol : str
             The starting molecule of the environment.
 
-        goal: Chemistry.Mol object
+        goal: str
             The optimisation goal of the environment (and the agent).
 
         similarity : float
