@@ -34,8 +34,8 @@ class Mol:
 
     df : ?
 
-    present : Boolean
-        A Boolean modifier that determines if a molecule library is present.
+    present : boolean
+        A boolean modifier that determines if a molecule library is present.
 
     Methods
     ----------
@@ -104,6 +104,17 @@ class Mol:
             # Returns Random Goal from library data frame
 
     def GetRandomGoal(self):
+        """Returns a random goal as the optimisation goal for the molecule.
+
+        Returns
+        ----------
+        randomMol['Compound ID'] : ?
+
+
+        False : Boolean
+            The method was unable to return a random goal.
+        """
+
         if self.present:
             randomMol = self.df.sample()
             self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]  # easy substring to remove object type
@@ -115,16 +126,28 @@ class Mol:
         else:
             return False
 
-    # Returns a list of the possible atoms to construct the mol with 
     def get_Atoms(self):
+        """Accessor method for the list of possible bonds to construct the molecule with.
+        Returns
+        ----------
+        list(atoms) : list
+            A list of the atoms in the optimisation goal.
+        """
+
         tempmol = Chem.MolFromSmiles(self.goal)
         atoms = set()
         for a in tempmol.GetAtoms():
             atoms.add(a.GetSymbol())
         return list(atoms)
 
-    # Returns a list of the possible bonds to construct the mol with 
     def get_Bonds(self):
+        """Accessor method for the list of possible bonds to construct the molecule with.
+
+        Returns
+        ----------
+        list(bonds) : list
+            A list of possible bonds to construct the molecule with.
+        """
         molbonds = Chem.MolFromSmiles(self.goal).GetBonds()
         bonds = set()
         for a in molbonds:
@@ -133,6 +156,16 @@ class Mol:
 
     # Adding an Atom to the molecule
     def AddA(self, Atom, back):
+        """Adds an atom to the front or back of the molecule.
+
+        Parameters
+        ----------
+        Atom : str
+            The string represetntaion of the atom being added.
+
+        back : boolean
+            Whether the atom should be added to the back of the molecule or not.
+        """
         self.modifications.append(Atom)
         self.updateRAM(self.storage)
         if back:
@@ -145,18 +178,35 @@ class Mol:
 
     # functionality to remove an atom   
     def RemoveA(self, index):
+        """Removes an atom from the molecule.
+
+        Parameters
+        ----------
+        index : int
+            The index of the atom being removed.
+        """
+
         self.updateRAM(self.storage)
         self.storage.pop(index)
         self.mol = "".join(self.storage)
 
     # The memory for recovering past states of the molecule
     def updateRAM(self, old):
+        """Updates the history of the molecule to include the new molecule state.
+
+        Parameters
+        ----------
+        old : str
+            The most recent state of the molecule.
+        """
         self.RAM[2] = self.RAM[1]
         self.RAM[1] = self.RAM[0]
         self.RAM[0] = old
 
     # Restore molecule to previous state
     def revertMol(self):
+        """Reverts the molecule and its history back one step.
+        """
         self.mol = self.RAM[0]
         self.storage = self.RAM[0]
         self.RAM[1] = self.RAM[2]
@@ -164,16 +214,42 @@ class Mol:
         self.mol = "".join(self.mol)
         self.modifications.append("Reverted")
 
-    # Return the last two states
     def history(self):
+        """Returns the history of the last two states of the molecule.
+
+        Returns
+        ----------
+        RAM : list
+            The history of the modifications of the molecule.
+        """
+
         return self.RAM
 
     # Returning the Mol   
     def GetMol(self):
+        """Accessor method for the current molecule's Mol object representation.
+
+        Returns
+        ----------
+        Chem.MolFromSmiles(self.mol) : Chem.Mol
+            A Chem.Mol object.
+        """
+
         return Chem.MolFromSmiles(self.mol)
 
     # Uses implicit sanitisation to check chemical validity
     def CheckValidity(self):
+        """Checks the chemical validity of the molecule state.
+
+        Returns
+        ----------
+        false : boolean
+            If the molecule is chemically invalid.
+
+        true : boolean
+            If the molecule is chemically valid.
+        """
+
         try:
             molecule = Chem.MolFromSmiles(self.mol)
             smiles = Chem.MolToSmiles(molecule, isomericSmiles=True)
@@ -185,6 +261,9 @@ class Mol:
             return True
 
     def CheckGoal(self):
+        """
+        Unsure as to what this does.
+        """
         try:
             molecule = Chem.MolFromSmiles(self.goal)
             smiles = Chem.MolToSmiles(molecule, isomericSmiles=True)
@@ -195,17 +274,29 @@ class Mol:
 
     # The Taninoto Similarity
     def GetSimilarity(self):
+        """Checks the Taninoto Similarity between two molecules.
+
+        Returns
+        ----------
+        value : float, int
+            Either a positive float measuring similarity or -1 if invalid.
+        """
+
         if self.CheckValidity():
             mol1 = Chem.MolFromSmiles(self.mol)
             mol2 = Chem.MolFromSmiles(self.goal)
             fingerprint1 = Chem.RDKFingerprint(mol1)
             fingerprint2 = Chem.RDKFingerprint(mol2)
-            return round(DataStructs.TanimotoSimilarity(fingerprint1, fingerprint2) * 100, 4)
+            value = round(DataStructs.TanimotoSimilarity(fingerprint1, fingerprint2) * 100, 4)
+            return value
         else:
-            return -1
+            value = -1
+            return value
 
     # Current and Previous state of the Mol
     def DisplayChanges(self):
+        """Used to check the current and previous state of the molecule.
+        """
         print("Molecule at state S-1: ")
         print(self.RAM[1])
         print("Molecule at state S: ")
