@@ -88,11 +88,12 @@ class Mol:
         """
         self.mol = mol
         self.goal = goal
-        self.RAM = [mol, mol, mol]
+        self.RAM = [[mol], [mol], [mol]]
         self.bondmap = {1.0: "", 1.5: "", 2.0: "=", 3.0: "#"}
 
         self.modifications = []
         self.storage = [mol]
+
 
         #  Connect library if present
         if os.path.isfile('./MoleculeLibrary.csv'):
@@ -117,10 +118,11 @@ class Mol:
 
         if self.present:
             randomMol = self.df.sample()
-            self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]  # easy substring to remove object type
-            self.mol = self.get_Atoms()[0]  # Use different initial molecule
-            self.RAM = [self.mol, self.mol, self.mol]
+            self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type 
+            self.mol = self.get_Atoms()[0]                      # Use different initial molecule
+
             self.storage = [self.mol]
+            self.RAM = [self.storage,self.storage,self.storage]
             return randomMol['Compound ID']
 
         else:
@@ -207,11 +209,10 @@ class Mol:
     def revertMol(self):
         """Reverts the molecule and its history back one step.
         """
-        self.mol = self.RAM[0]
+        self.mol = "".join(self.RAM[0])
         self.storage = self.RAM[0]
-        self.RAM[1] = self.RAM[2]
         self.RAM[0] = self.RAM[1]
-        self.mol = "".join(self.mol)
+        self.RAM[1] = self.RAM[2]
         self.modifications.append("Reverted")
 
     def history(self):

@@ -211,20 +211,22 @@ class MoleculeEnvironment(gym.Env):
     def reset(self):
         """Resets the state of the environment.
         """
+        
         self.molecule.goal = self.goal
         self.molecule.mol = self.mol
         self.molecule.modifications = []
 
     def render(self):
-        """Graphically renders the current state of the environment.
+      """Graphically renders the current state of the environment.
         """
-        if self.molecule.CheckValidity() == True:
+      
+        if self.validstep == True:
             SMILES = self.molecule.GetMol()
             Image = Draw.MolToImage(SMILES, size=(300, 300))
             npFormat = np.asarray(Image)
             plt.imshow(npFormat)
             plt.draw()
-            plt.pause(0.5) # pause how many seconds
+            plt.pause(0.25) # pause how many seconds
             plt.close()
         else:
             print("Cannot render this molecule")
