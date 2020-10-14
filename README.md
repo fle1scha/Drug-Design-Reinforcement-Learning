@@ -34,10 +34,11 @@ Furthermore, the TEDD program requires Jupyter Notebook and an RDKit package ins
 [Install Jupyter Notebook here](https://jupyter.org/install)
 
 ## Usage
-To run the TEDD environment on your local computer, run the following code in the '.../TEDD' directory:
+To run the TEDD environment on your local computer, run the following code in the '.../TEDD' directory. This will open a local host website in your browser, containing a worktree of the TEDD files. 
 ```bash
-python MainMolcule.py
+jupyter notebook
 ```
+To run the TEDD program, run the file **MainMolecule.ipynb***.
 
 The user will be presented with the option to set the initial state of the molecule.  For first time users, it is suggested that you input '1' to allow the program to select its initial state. This will allow you to become familiar with the environment. 
 ```bash
