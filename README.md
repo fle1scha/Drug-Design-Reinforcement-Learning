@@ -11,6 +11,9 @@ Although the AIGym environment is open source, the extensions of it that are mad
 Use the environment management system [Conda,](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 and the package manager [pip](https://pip.pypa.io/en/stable/) to install the environment and its dependencies. 
 
+### Notes on System Requirements
+
+
 In the TEDD project directory on your local computer:
 ```bash
 conda env create -f environment.yml
@@ -24,6 +27,11 @@ Once the environment is activated, install all dependencies:
 ```bash
 pip install -e .
 ```
+Furthermore, the TEDD program requires Jupyter Notebook and an RDKit package installation: 
+
+[Install RDKit here](https://www.rdkit.org/docs/Install.html)
+
+[Install Jupyter Notebook here](https://jupyter.org/install)
 
 ## Usage
 To run the TEDD environment on your local computer, run the following code in the '.../TEDD' directory:
@@ -50,10 +58,10 @@ Input ‘2’ to choose a RANDOM molecule.
 
 ```
 
-Lastly, the user will be prompted to input a desired similarity value. This value is the optimisation goal of the environment, and the environment will stop iterating once the initial molecule reaches aforementioned similarity. For example, an inputted a value of '0.6', will cause the environment to terminate when the starting molecule is 60% similar to its target molecule. 
+Lastly, the user will be prompted to input a desired similarity value. This value is the optimisation goal of the environment, and the environment will stop iterating once the initial molecule reaches aforementioned similarity. For example, an inputted a value of '60', will cause the environment to terminate when the starting molecule is 60% similar to its target molecule. 
 ```bash
 Step 3) Choose optimisation goal: 
-Input a floating-point value between 0 and 1.
+Input a floating-point value between 0 and 100
 
 ```
 
