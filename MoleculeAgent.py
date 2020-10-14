@@ -15,7 +15,7 @@ class MoleculeAgent:
         returns the chosen action based on the Agent's policy.
     """
 
-    def __init__(self, action_space):
+    def __init__(self, observation_space, action_space):
         """
         Parameters
         ----------
