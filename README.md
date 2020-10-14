@@ -54,19 +54,21 @@ Input ‘1’ to choose a CARBON molecule.
 Input ‘2’ to choose a RANDOM molecule.
 
 ```
-<input type="text" id="name" name="name"/>
+
 
 Next, the user will be presented with the option to set the optimisation target molecule. This is essentially what the learning agent will try and reach. Again, for first time users, it is suggested to input '2' and allow the program to demonstrate its functionality. 
 ```bash
 Step 2) Choose target molecule: 
 Input ‘1’ to SPECIFY a molecule.
 Input ‘2’ to choose a RANDOM molecule.
+
 ```
 
 Lastly, the user will be prompted to input a desired similarity value. This value is the optimisation goal of the environment, and the environment will stop iterating once the initial molecule reaches aforementioned similarity. For example, an inputted a value of '0.6', will cause the environment to terminate when the starting molecule is 60% similar to its target molecule. 
 ```bash
 Step 3) Choose optimisation goal: 
 Input a floating-point value between 0 and 1.
+
 ```
 
 The environment will then run through its iterations, returning information on its state, the agent's action and the Reinforcement Algorithm. 
