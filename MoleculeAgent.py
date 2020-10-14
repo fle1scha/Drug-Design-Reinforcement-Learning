@@ -1,6 +1,7 @@
 import gym
 from gym import wrappers, logger
 
+
 class MoleculeAgent:
     """
     A class used to represent an Agent that implements a RL policy.
@@ -24,7 +25,7 @@ class MoleculeAgent:
         """
 
         self.action_space = action_space
-  
+
     def act(self, observation, reward, done):
         """Determines the MoleculeAgent's action to return to the environment.
 
@@ -44,8 +45,26 @@ class MoleculeAgent:
         action : int
             The chosen action of the agent, given its policy.
         """
-        
-        #determine simply policy
+
+        # determine simply policy
         action = self.action_space.sample()
         return action
 
+    def remember(self, state, action, reward, next_state, done):
+        """Used to add a previous iteration of the environment to memory.
+
+        Parameters
+        __________
+        state : float
+            The state of the environment.
+        action : int
+            The action chosen by the agent.
+        reward : int
+            The reward given to the agent.
+        next_state : float
+            The next state of the environment.
+        done : boolean
+            Whether the environment is terminal or not.
+        """
+        
+        self.memory.append((state, action, reward, next_state, done))
