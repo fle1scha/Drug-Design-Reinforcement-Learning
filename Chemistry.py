@@ -238,7 +238,7 @@ class Mol:
             pass
 
     # The Taninoto Similarity
-    def GetSimilarity(self)
+    def GetSimilarity(self):
         """
         Checks the Taninoto Similarity between two molecules.
 
