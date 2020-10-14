@@ -1,19 +1,5 @@
-```
-              _                 _      
-  /\/\   ___ | | ___  ___ _   _| | ___ 
- /    \ / _ \| |/ _ \/ __| | | | |/ _ \
-/ /\/\ \ (_) | |  __/ (__| |_| | |  __/
-\/    \/\___/|_|\___|\___|\__,_|_|\___|
-   __           _                                      _   
-  /__\ ____   _(_)_ __ ___  _ __  _ __ ___   ___ _ __ | |_ 
- /_\| '_ \ \ / / | '__/ _ \| '_ \| '_ ` _ \ / _ \ '_ \| __|
-//__| | | \ V /| | | | (_) | | | | | | | | |  __/ | | | |_ 
-\__/|_| |_|\_/ |_|_|  \___/|_| |_|_| |_| |_|\___|_| |_|\__|
-
-```                                                        
-![testing](https://github.com/robmacc/capstone-molecule-environment/workflows/testing/badge.svg)
-
 # Training Environment for Drug Design 
+![testing](https://github.com/robmacc/capstone-molecule-environment/workflows/testing/badge.svg)
 
 ## Introduction 
 This Python training environment (TEDD) allows an agent - essentially a learning piece of software - to modify drugs in order to generate novel structures with prescribed optimisation goals. The agent uses Reinforcement Learning - a machine learning technique - to make decisions, modify a molecule, and to reach the provided optimisation goal. The environment uses the AIGym framework, and the RDKit Chemistry package. 
