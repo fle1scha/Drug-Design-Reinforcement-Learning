@@ -35,7 +35,7 @@ To run the TEDD environment on your local computer, run the following code in th
 ```bash
 jupyter notebook
 ```
-To run the TEDD program, run the file **MainMolecule.ipynb***.
+To run the TEDD program, run the file **MainMolecule.ipynb**.
 
 The user will be presented with the option to set the initial state of the molecule.  For first time users, it is suggested that you input '1' to allow the program to select its initial state. This will allow you to become familiar with the environment. 
 ```bash
@@ -64,3 +64,6 @@ Input a floating-point value between 0 and 100
 ```
 
 The environment will then run through its iterations, returning information on its state, the agent's action and the Reinforcement Algorithm. 
+
+## License
+The RDKit installation document is copyright (C) 2012-2018 by Greg Landrum. 
