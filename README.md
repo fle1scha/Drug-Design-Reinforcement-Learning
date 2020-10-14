@@ -26,7 +26,7 @@ pip install -e .
 ```
 
 ## Usage
-To run the TEDD environment:
+To run the TEDD environment on your local computer, run the following code in the '.../TEDD directory':
 ```bash
 python MainMolcule.py
 ```
