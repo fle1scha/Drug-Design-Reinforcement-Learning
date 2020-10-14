@@ -11,9 +11,6 @@ Although the AIGym environment is open source, the extensions of it that are mad
 Use the environment management system [Conda,](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 and the package manager [pip](https://pip.pypa.io/en/stable/) to install the environment and its dependencies. 
 
-### Notes on System Requirements
-
-
 In the TEDD project directory on your local computer:
 ```bash
 conda env create -f environment.yml
