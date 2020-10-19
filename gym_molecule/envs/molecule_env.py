@@ -114,12 +114,13 @@ class MoleculeEnvironment(gym.Env):
         """
         if target == "1":
             self.molecule = Mol(start, "F")
-            self.molecule.GetRandomGoal()
+            self.molecule.GetRandomMolecule()
         else:
             self.molecule = Mol(start, target)
 
         self.mol = self.molecule.mol
         self.goal = self.molecule.goal
+        self.similarity = goal
         
         self.similarity = goal             # Float comparison 
         self.currentReward = 0             # this iterations reward

@@ -105,7 +105,7 @@ class Mol:
         
     # Returns Random Goal from library data frame   
     
-    def GetRandomGoal(self):
+    def GetRandomMolecule(self):
         """Returns a random goal as the optimisation goal for the molecule.
 
         Returns

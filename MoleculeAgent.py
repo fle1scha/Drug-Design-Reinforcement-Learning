@@ -1,5 +1,8 @@
 import gym
 from gym import wrappers, logger
+from collections import deque
+
+MEMORY_SIZE = 1000000
 
 
 class MoleculeAgent:
@@ -25,6 +28,7 @@ class MoleculeAgent:
         """
 
         self.action_space = action_space
+        self.memory = deque(maxlen=MEMORY_SIZE)
 
     def act(self, observation, reward, done):
         """Determines the MoleculeAgent's action to return to the environment.
@@ -68,3 +72,11 @@ class MoleculeAgent:
         """
         
         self.memory.append((state, action, reward, next_state, done))
+        
+    def save_memory(self):
+        with open("memory.txt", "w+") as f:
+            f.write('\n'.join('%s %s %s %s %s' % step for step in self.memory))
+                
+        
+
+
