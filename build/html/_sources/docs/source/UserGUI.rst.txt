@@ -1,0 +1,7 @@
+UserGUI module
+==============
+
+.. automodule:: UserGUI
+   :members:
+   :undoc-members:
+   :show-inheritance:
