@@ -24,11 +24,16 @@ Once the environment is activated, install all dependencies:
 ```bash
 pip install -e .
 ```
-Furthermore, the TEDD program requires Jupyter Notebook and an RDKit package installation: 
+Furthermore, the TEDD program requires Jupyter Notebook, Matplotlib and an RDKit package installation: 
 
 [Install RDKit here](https://www.rdkit.org/docs/Install.html)
 
 [Install Jupyter Notebook here](https://jupyter.org/install)
+
+Matplotlib can be installed using pip:
+```bash
+python -m pip install -U matplotlib
+```
 
 ## Usage
 To run the TEDD environment on your local computer, run the following code in the '.../TEDD' directory. This will open a local host website in your browser, containing a worktree of the TEDD files. 
