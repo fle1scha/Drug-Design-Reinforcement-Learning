@@ -74,7 +74,7 @@ class MoleculeAgent:
         self.memory.append((state, action, reward, next_state, done))
         
     def save_memory(self):
-        with open("memory.txt", "w+") as f:
+        with open("data/agent_memory.txt", "w+") as f:
             f.write('\n'.join('%s %s %s %s %s' % step for step in self.memory))
                 
         
