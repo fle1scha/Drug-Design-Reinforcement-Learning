@@ -32,8 +32,6 @@ class Mol:
     storage : list
         A list of additions that have been made to the molecule.
 
-    df : ?
-
     present : boolean
         A boolean modifier that determines if a molecule library is present.
 
@@ -42,37 +40,31 @@ class Mol:
     __init__(self, mol, goal)
         The constructor method for the Mol class.
 
-    GetRandomGoal(self)
+    get_random_goal(self)
         Returns a random optimisation goal.
 
-    get_Atoms(self)
+    get_atoms(self)
         Returns a list of the possible atoms to construct the mol with.
 
-    get_Bonds(self)
+    get_bonds(self)
         Returns a list of the possible bonds to construct the mol with.
 
-    AddA(self, Atom, back)
+    add_atom(self, Atom, back)
         Adds an Atom to the molecule.
 
-    RemoveA(self, index)
+    remove_atom(self, index)
         Removes an Atom from the molecule.
-
-    updateRAM(self, old)
-     Updates the memory for recovering past states of the molecule.
-
-    revertMol(self)
-        Restores molecule to previous state.
 
     history(self)
         Returns the last two states of the molecule.
 
-    GetMol(self)
+    get_mol(self)
         Returns the Mol object
 
-    CheckValidity(self)
+    check_validity(self)
         Uses implicit sanitization to check chemical validity of a molecule.
 
-    DisplayChanges(self)
+    display_changes(self)
         Shows the current and previous state of the mol object.
     """
 
@@ -92,7 +84,7 @@ class Mol:
         self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"} 
         self.modifications = [self.mol]    # building blocks of the molecule
         if self.mol == "1":
-                self.mol = random.choice(self.get_Atoms())
+                self.mol = random.choice(self.get_atoms())
 
      
         #  Connect library if present
@@ -105,7 +97,7 @@ class Mol:
         
     # Returns Random Goal from library data frame   
     
-    def GetRandomMolecule(self):
+    def get_random_molecule(self):
         """Returns a random goal as the optimisation goal for the molecule.
 
         Returns
@@ -118,15 +110,15 @@ class Mol:
         """
 
         if self.present:
-            randomMol = self.df.sample()
+            random_mol = self.df.sample()
 
-            self.goal = str(randomMol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type   
-            return randomMol['Compound ID']
+            self.goal = str(random_mol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type   
+            return random_mol['Compound ID']
 
         else:
             return False
 
-    def get_Atoms(self):
+    def get_atoms(self):
         """Accessor method for the list of possible bonds to construct the molecule with.
         Returns
         ----------
@@ -134,13 +126,13 @@ class Mol:
             A list of the atoms in the optimisation goal.
         """
 
-        tempmol = Chem.MolFromSmiles(self.goal)
+        temp_mol = Chem.MolFromSmiles(self.goal)
         atoms = set()
-        for a in tempmol.GetAtoms():
+        for a in temp_mol.GetAtoms():
             atoms.add(a.GetSymbol())
         return list(atoms)
 
-    def get_Bonds(self):
+    def get_bonds(self):
         """Accessor method for the list of possible bonds to construct the molecule with.
 
         Returns
@@ -148,15 +140,15 @@ class Mol:
         list(bonds) : list
             A list of possible bonds to construct the molecule with.
         """
-        molbonds = Chem.MolFromSmiles(self.goal).GetBonds()
+        mol_bonds = Chem.MolFromSmiles(self.goal).GetBonds()
         bonds = set()
-        for a in molbonds:
+        for a in mol_bonds:
             bonds.add(a.GetBondTypeAsDouble())
         return list(bonds)
 
     
      # Adding an Atom to the molecule
-    def AddAtom(self, front, back):
+    def add_atom(self, front, back):
         """
         Adds an atom to the front or back of the molecule.
 
@@ -179,7 +171,7 @@ class Mol:
         """
         current_molecule = self.mol
         new_molecule = front + current_molecule + back
-        if self.isValid(new_molecule) == True:
+        if self.is_valid(new_molecule) == True:
             self.modifications.append(back)
             self.modifications.insert(0,front)
             self.mol = new_molecule
@@ -188,7 +180,7 @@ class Mol:
             return False
         
     # functionality to remove an atom   
-    def RemoveA(self,index):
+    def remove_atom(self,index):
         """
         Removes an atom from the molecule.
 
@@ -201,7 +193,7 @@ class Mol:
         
 
     # Returning the Mol   
-    def GetMol(self):
+    def get_mol(self):
         """Accessor method for the current molecule's Mol object representation.
 
         Returns
@@ -214,7 +206,7 @@ class Mol:
 
     # Uses implicit sanitisation to check chemical validity
 
-    def isValid(self, mol):
+    def is_valid(self, mol):
         """
         Checks the chemical validity of the molecule state.
 
@@ -237,7 +229,7 @@ class Mol:
 
 
     # The Taninoto Similarity
-    def GetSimilarity(self):
+    def get_similarity(self):
         """
         Checks the Taninoto Similarity between two molecules.
 
