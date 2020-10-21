@@ -7,7 +7,7 @@ from rdkit import Chem
 from rdkit.Chem import Draw
 import numpy as np
 import random as rd
-from chemistry import Mol
+from Chemistry import Mol
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
@@ -122,23 +122,17 @@ class MoleculeEnvironment(gym.Env):
         self.goal = self.molecule.goal
         self.similarity = goal
         
-        self.similarity = goal             # Float comparison 
-        self.current_reward = 0             # this iterations reward
+        self.similarity = goal       
         self.valid_step = True 
          
         high = np.array([len(self.molecule.get_atoms()), len(self.molecule.get_bonds())], dtype=np.float32)
-        
             
-
-        # The action_space is defined. 
         self.action_space = spaces.Discrete(6)
-        # Atom space determined from the goals atoms
-        self.atom_space = self.molecule.get_atoms()
-        # Bond space based on goal, float values 1.0, 2.0, 1.5, 3.0
-        self.bond_space = self.molecule.get_bonds()
-        # The observation_space is defined.
         self.observation_space = spaces.Box(0,high,dtype=np.float32)
+        self.atom_space = self.molecule.get_atoms()
+        self.bond_space = self.molecule.get_bonds()
 
+        self.done = False
         self.seed()
         self.state = 0
    
@@ -179,7 +173,6 @@ class MoleculeEnvironment(gym.Env):
         
         """
 
-        self.current_reward = 0
         err_msg = "%r (%s) invalid" % (action, type(action))
         assert self.action_space.contains(action), err_msg
 
@@ -214,20 +207,16 @@ class MoleculeEnvironment(gym.Env):
             pass
             
         self.state = self.molecule.get_similarity()
-        done = bool(self.molecule.get_similarity() >= (self.similarity))
-
-        if done == True:
-            reward = 100
-        else:
-            reward = self.calculate_reward()
+        self.done = bool(self.molecule.get_similarity() >= (self.similarity*100))
+        reward = self.calculate_reward()
         
-        return np.array(self.state), reward, done, self.molecule.modifications
+        return np.array(self.state), reward, self.done, self.molecule.modifications
 
 
     def reset(self):
         """Resets the state of the environment.
         """
-        
+     
         self.molecule.goal = self.goal
         self.molecule.mol = self.mol
         self.molecule.modifications = []
@@ -272,10 +261,14 @@ class MoleculeEnvironment(gym.Env):
         self.current_reward : int
             The reward that will be given to the agent.
         """
-
-        if self.valid_step == False:
-            self.current_reward -= 10   # invalid penalty
-        return self.current_reward
+        
+        if self.done:
+            return 100
+        elif self.valid_step:
+            return 10
+        else:
+            return -10
+        
     
     def update_policy(self):
         """Shows that the policy of the agent has been updated.

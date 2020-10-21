@@ -1,8 +1,17 @@
-N=
+
+
+
+
+
 N
+bracketed atom
+bracketed atom
+C
 O
 bracketed atom
-
 ring
-
+O
 ring
+ring
+ring
+O

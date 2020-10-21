@@ -242,7 +242,7 @@ class Mol:
         mol2 = Chem.MolFromSmiles(self.goal)
         fingerprint1 = Chem.RDKFingerprint(mol1)
         fingerprint2 = Chem.RDKFingerprint(mol2)
-        return round(DataStructs.TanimotoSimilarity(fingerprint1,fingerprint2) *100, 4) 
+        return round(DataStructs.TanimotoSimilarity(fingerprint1,fingerprint2) * 100, 4) 
     
     def save_modifications(self):
         with open("data/molecule_modifications.txt", "w+") as f:
