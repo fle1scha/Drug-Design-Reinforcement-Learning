@@ -90,7 +90,7 @@ class Mol:
         self.mol = mol     # The starting canvas molecule
         self.goal = goal   # molecule to represent the optimised state
         self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"} 
-        self.modifications = []    # building blocks of the molecule
+        self.modifications = [self.mol]    # building blocks of the molecule
         if self.mol == "1":
                 self.mol = random.choice(self.get_Atoms())
 
@@ -162,16 +162,26 @@ class Mol:
 
         Parameters
         ----------
-        Atom : str
-            The string represetntaion of the atom being added.
+        front : str
+            The string represetntaion of the atom being added to the front.
 
-        back : boolean
-            Whether the atom should be added to the back of the molecule or not.
+        back : str
+            The string represetntaion of the atom being added to the back.
+            
+        Returns
+        ----------
+        false : boolean
+            If the molecule is chemically invalid and a change has not been made.
+
+        true : boolean
+            If the molecule is chemically valid and a change has been made.
+            
         """
         current_molecule = self.mol
         new_molecule = front + current_molecule + back
         if self.isValid(new_molecule) == True:
-            self.modifications.append(front + back)
+            self.modifications.append(back)
+            self.modifications.insert(0,front)
             self.mol = new_molecule
             return True
         else:
@@ -225,17 +235,6 @@ class Mol:
         else:
             return True
 
-    def CheckGoal(self):
-        """
-        Unsure as to what this does.
-        """
-        try:
-            molecule = Chem.MolFromSmiles(self.goal)
-            smiles = Chem.MolToSmiles(molecule, isomericSmiles=True)
-        except:
-            self.GetRandomGoal()
-        else:
-            pass
 
     # The Taninoto Similarity
     def GetSimilarity(self):
@@ -256,4 +255,4 @@ class Mol:
 
 
 if __name__ == '__main__':
-  Mol()
+      Mol()
