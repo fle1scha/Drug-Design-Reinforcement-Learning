@@ -212,7 +212,10 @@ class Mol:
             If the molecule is chemically valid and a change has been made.
             
         """
+        
         current_modifications = copy.copy(self.modifications)
+        if len(current_modifications[index])>2:
+            return False
         if typeof == 1:
             current_modifications[index] = "(" + current_modifications[index] + ")"
         else:
