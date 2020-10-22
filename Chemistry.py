@@ -230,6 +230,8 @@ class Mol:
         index : int
             The index of the atom being removed.
         """
+        if len(self.modifications) < 2:
+            return False
         current_modifications = copy.copy(self.modifications)
         del current_modifications[index]
         new_molecule = "".join(current_modifications)
