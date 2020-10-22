@@ -33,10 +33,10 @@ class MoleculeEnvironment(gym.Env):
     molecule : Mol object
         A user created class to hold the building methods for the environment mol object.
 
-    mol : Chem.Mol object
+    start_molecule : Chem.Mol object
         The current build state of the environment's molecule.
 
-    goal : Chem.Mol object
+    target_molecule : Chem.Mol object
         The optimisation state of the environment's molecule.
 
     self.action_space : spaces.Discrete(6)
@@ -94,8 +94,7 @@ class MoleculeEnvironment(gym.Env):
         2     Add Atom with Bond to Back of Molecule
         3     Add Atom with Bond to Front of Molecule
         4     Add Bracketed Atom to Molecule
-        5     Add Ring to Molecule
-        6     Remove Atom from Molecule
+        5    Remove Atom from Molecule
     """
         
     def __init__(self, mol, goal):  
@@ -108,8 +107,6 @@ class MoleculeEnvironment(gym.Env):
         goal: str
             The optimisation goal of the environment (and the agent).
 
-        similarity : float
-            The percentage similarity of the mol to the goal, represented as a float.
         """
 
         self.molecule = mol
@@ -154,15 +151,14 @@ class MoleculeEnvironment(gym.Env):
         
         """
             Actions:
-        Type: Discrete(6)
+        Type: Spaces.Discrete(6)
         Num   Action
         0     Add Atom to Back of Molecule
         1     Add Atom to Front of Molecule
         2     Add Atom with Bond to Back of Molecule
         3     Add Atom with Bond to Front of Molecule
         4     Add Bracketed Atom to Molecule
-        5     Add Ring to Molecule
-        6     Remove Atom from Molecule
+        5     Remove Atom from Molecule
         
         """
 
@@ -189,7 +185,7 @@ class MoleculeEnvironment(gym.Env):
             self.validstep = self.molecule.add_brackets(rd.choice(range(1,3)), rd.choice(range(len(self.molecule.modifications))))
         
         elif action == 5:
-            self.validstep = self.molecule.remove_atom(rd.choice(range(len(self.molecule.modifications))))
+            self.validstep = self.molecule.remove_atom(-1)
         else:
             pass
             

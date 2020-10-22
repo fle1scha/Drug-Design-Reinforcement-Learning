@@ -70,5 +70,22 @@ Input a floating-point value between 0 and 100
 
 The environment will then run through its iterations, returning information on its state, the agent's action and the Reinforcement Algorithm. 
 
+## Testing
+In order to run the pytest functionality and test the environment, the following command can be entered when in the /TEDD directory:
+```bash
+pytest
+```
+
+## Documentation
+To create new Sphinx documentation, run the following code:
+```bash
+sphinx-quickstart
+```
+
+This will prompt the user to create new build and source folders, and generate source files for Sphinx documentation. To generate Sphinx documentation in html format, run the following command:
+```bash
+make html
+```
+
 ## License
 The RDKit installation document is copyright (C) 2012-2018 by Greg Landrum. 

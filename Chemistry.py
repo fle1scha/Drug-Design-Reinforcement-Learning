@@ -15,10 +15,10 @@ class Mol:
     ...
     Attributes
     ----------
-    mol : str
+    start : str
         The starting molecule of the environment.
 
-    goal : str
+    target : str
         The optimisation goal molecule of the environment.
 
     RAM : list
@@ -67,6 +67,15 @@ class Mol:
 
     display_changes(self)
         Shows the current and previous state of the mol object.
+
+    def save_modifications(self)
+        Saves the modifications of the agent
+
+    def set_start_molecule(self, start)
+        The mutator method for the start molecule of the environment.
+
+    def set_target_molecule(self, target)
+        The mutator method for the target molecule of the environment.
     """
 
     def __init__(self):
@@ -80,30 +89,29 @@ class Mol:
             The optimisation goal of the environment (and the agent).
         """
 
-        self.start = ""    
-        self.target = "" 
-        self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"} 
-        self.modifications = [self.start] 
+        self.start = ""
+        self.target = ""
+        self.bondmap = {1.0: "", 1.5: "", 2.0: "=", 3.0: "#"}
+        self.modifications = [self.start]
 
         if os.path.isfile('./MoleculeLibrary.csv'):
             self.df = pd.read_csv('MoleculeLibrary.csv')
             self.present = True
 
-        else: 
+        else:
             self.present = False
-    
-    
+
     def set_start_molecule(self, start):
+        """The mutator method for the start molecule of the environment."""
         self.start = start
-        
-        
+
     def set_target_molecule(self, target):
+        """The mutator method for the target molecule of the environment."""
+
         self.target = target
-    
-    
-    def get_random_molecule(self, is_target = True): # if target = True, then chooses random target molecule
+
+    def get_random_molecule(self, is_target=True):  # if target = True, then chooses random target molecule
         """
-        Returns a random goal as the optimisation goal for the molecule.
         Returns a random goal as the optimisation goal for the molecule.
 
         Returns
@@ -116,10 +124,9 @@ class Mol:
         """
         if is_target:
             random_mol = self.df.sample()
-            return(str(random_mol['SMILES']).split("\n")[0].split()[1])
+            return (str(random_mol['SMILES']).split("\n")[0].split()[1])
         else:
-            return(random.choice(self.get_atoms()))
-
+            return (random.choice(self.get_atoms()))
 
     def get_atoms(self):
         """Accessor method for the list of possible bonds to construct the molecule with.
@@ -128,7 +135,7 @@ class Mol:
         list(atoms) : list
             A list of the atoms in the optimisation goal.
         """
-        
+
         temp_mol = Chem.MolFromSmiles(self.target)
         atoms = set()
         for a in temp_mol.GetAtoms():
@@ -149,8 +156,7 @@ class Mol:
             bonds.add(a.GetBondTypeAsDouble())
         return list(bonds)
 
-    
-     # Adding an Atom to the molecule
+    # Adding an Atom to the molecule
     def add_atom(self, front, back):
         """
         Adds an atom to the front or back of the molecule.
@@ -176,14 +182,14 @@ class Mol:
         new_molecule = front + current_molecule + back
         if self.is_valid(new_molecule) == True:
             self.modifications.append(back)
-            self.modifications.insert(0,front)
+            self.modifications.insert(0, front)
             self.modifications = list(filter(None, self.modifications))
 
             self.start = new_molecule
             return True
         else:
             return False
-        
+
     # Adding an Atom to the molecule
     def add_brackets(self, typeof, index):
         """
@@ -218,10 +224,9 @@ class Mol:
             return True
         else:
             return False
-        
-        
+
     # functionality to remove an atom   
-    def remove_atom(self,index):
+    def remove_atom(self, index):
         """
         Removes an atom from the molecule.
 
@@ -242,7 +247,6 @@ class Mol:
         else:
             return False
         pass
-        
 
     # Returning the Mol   
     def get_mol(self):
@@ -278,7 +282,6 @@ class Mol:
         else:
             return True
 
-
     # The Taninoto Similarity
     def get_similarity(self):
         """
@@ -293,13 +296,13 @@ class Mol:
         mol2 = Chem.MolFromSmiles(self.target)
         fingerprint1 = Chem.RDKFingerprint(mol1)
         fingerprint2 = Chem.RDKFingerprint(mol2)
-        return round(DataStructs.TanimotoSimilarity(fingerprint1,fingerprint2) * 100, 4) 
-    
+        return round(DataStructs.TanimotoSimilarity(fingerprint1, fingerprint2) * 100, 4)
+
     def save_modifications(self):
+        """Saves the modifications of the agent."""
         with open("data/molecule_modifications.txt", "w+") as f:
             f.write('\n'.join('%s' % element for element in self.modifications))
-        
 
 
 if __name__ == '__main__':
-      Mol()
+    Mol()
