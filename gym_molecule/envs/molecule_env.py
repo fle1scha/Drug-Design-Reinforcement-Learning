@@ -193,23 +193,13 @@ class MoleculeEnvironment(gym.Env):
             self.valid_step = self.molecule.add_atom(bondedatom,"")
             
         elif action == 4:
-<<<<<<< HEAD
-            self.molecule.modifications.append("bracketed atom")
-       
-        elif action == 5:
-            self.molecule.modifications.append("ring")
-=======
             self.validstep = self.molecule.add_brackets(rd.choice(range(1,3)), rd.choice(range(len(self.molecule.modifications))))
-        else:
-            # print("add ring")
-            #self.molecule.modifications.append("ring")
-            pass
->>>>>>> 716c667... Added the functionality for adding brackets to an atom
-            
-        elif action == 6:
-            # TODO: remove atom from molecule
-            pass
         
+        elif action == 5:
+            # TODO: remove atom from molecule
+            pass   
+        elif action == 6:
+            pass    
         else:
             # TODO: remove bond from molecule
             pass
@@ -227,13 +217,8 @@ class MoleculeEnvironment(gym.Env):
      
         self.molecule.goal = self.goal
         self.molecule.mol = self.mol
-<<<<<<< HEAD
-        self.molecule.modifications = []
-        return self.molecule.get_similarity()
-=======
         self.molecule.modifications = [self.mol]
-        return self.molecule.GetSimilarity()
->>>>>>> 716c667... Added the functionality for adding brackets to an atom
+        return self.molecule.get_similarity()
 
     def render(self):
         """

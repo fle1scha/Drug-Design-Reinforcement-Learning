@@ -98,14 +98,10 @@ class Mol:
         
     # Returns Random Goal from library data frame   
     
-<<<<<<< HEAD
     def get_random_molecule(self):
-        """Returns a random goal as the optimisation goal for the molecule.
-=======
-    def GetRandomMolecule(self):
         """
         Returns a random goal as the optimisation goal for the molecule.
->>>>>>> 716c667... Added the functionality for adding brackets to an atom
+        Returns a random goal as the optimisation goal for the molecule.
 
         Returns
         ----------
@@ -216,7 +212,7 @@ class Mol:
         else:
             current_modifications[index] = "[" + current_modifications[index] + "]"
         new_molecule = "".join(current_modifications)
-        if self.isValid(new_molecule) == True:
+        if self.is_valid(new_molecule) == True:
             self.modifications = current_modifications
             self.mol = new_molecule
             return True
