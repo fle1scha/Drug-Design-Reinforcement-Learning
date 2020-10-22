@@ -69,7 +69,7 @@ class Mol:
         Shows the current and previous state of the mol object.
     """
 
-    def __init__(self, mol, goal):
+    def __init__(self):
         """
         Parameters
         ----------
@@ -79,24 +79,29 @@ class Mol:
         goal : str
             The optimisation goal of the environment (and the agent).
         """
-        # Set instance variables
-        self.mol = mol     # The starting canvas molecule
-        self.goal = goal   # molecule to represent the optimised state
-        self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"} 
-        self.modifications = [self.mol]    # building blocks of the molecule
 
-     
-        #  Connect library if present
+        self.start = ""    
+        self.target = "" 
+        self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"} 
+        self.modifications = [self.start] 
+
         if os.path.isfile('./MoleculeLibrary.csv'):
             self.df = pd.read_csv('MoleculeLibrary.csv')
             self.present = True
 
         else: 
             self.present = False
-        
-    # Returns Random Goal from library data frame   
     
-    def get_random_molecule(self):
+    
+    def set_start_molecule(self, start):
+        self.start = start
+        
+        
+    def set_target_molecule(self, target):
+        self.target = target
+    
+    
+    def get_random_molecule(self, is_target = True): # if target = True, then chooses random target molecule
         """
         Returns a random goal as the optimisation goal for the molecule.
         Returns a random goal as the optimisation goal for the molecule.
@@ -109,17 +114,12 @@ class Mol:
         False : Boolean
             The method was unable to return a random goal.
         """
-        if self.mol == "1":
-                self.mol = random.choice(self.get_atoms())
-
-        if self.present:
+        if is_target:
             random_mol = self.df.sample()
-
-            self.goal = str(random_mol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type   
-            return random_mol['Compound ID']
-
+            return(str(random_mol['SMILES']).split("\n")[0].split()[1])
         else:
-            return False
+            return(random.choice(self.get_atoms()))
+
 
     def get_atoms(self):
         """Accessor method for the list of possible bonds to construct the molecule with.
@@ -129,7 +129,7 @@ class Mol:
             A list of the atoms in the optimisation goal.
         """
         
-        temp_mol = Chem.MolFromSmiles(self.goal)
+        temp_mol = Chem.MolFromSmiles(self.target)
         atoms = set()
         for a in temp_mol.GetAtoms():
             atoms.add(a.GetSymbol())
@@ -143,7 +143,7 @@ class Mol:
         list(bonds) : list
             A list of possible bonds to construct the molecule with.
         """
-        mol_bonds = Chem.MolFromSmiles(self.goal).GetBonds()
+        mol_bonds = Chem.MolFromSmiles(self.target).GetBonds()
         bonds = set()
         for a in mol_bonds:
             bonds.add(a.GetBondTypeAsDouble())
@@ -172,14 +172,14 @@ class Mol:
             If the molecule is chemically valid and a change has been made.
             
         """
-        current_molecule = self.mol
+        current_molecule = self.start
         new_molecule = front + current_molecule + back
         if self.is_valid(new_molecule) == True:
             self.modifications.append(back)
             self.modifications.insert(0,front)
             self.modifications = list(filter(None, self.modifications))
 
-            self.mol = new_molecule
+            self.start = new_molecule
             return True
         else:
             return False
@@ -214,7 +214,7 @@ class Mol:
         new_molecule = "".join(current_modifications)
         if self.is_valid(new_molecule) == True:
             self.modifications = current_modifications
-            self.mol = new_molecule
+            self.start = new_molecule
             return True
         else:
             return False
@@ -235,7 +235,7 @@ class Mol:
         new_molecule = "".join(current_modifications)
         if self.is_valid(new_molecule) == True:
             self.modifications = current_modifications
-            self.mol = new_molecule
+            self.start = new_molecule
             return True
         else:
             return False
@@ -248,10 +248,10 @@ class Mol:
 
         Returns
         ----------
-        Chem.MolFromSmiles(self.mol) : Chem.Mol
+        Chem.MolFromSmiles(self.start) : Chem.Mol
             A Chem.Mol object.
         """
-        return Chem.MolFromSmiles(self.mol)
+        return Chem.MolFromSmiles(self.start)
 
     # Uses implicit sanitisation to check chemical validity
 
@@ -287,8 +287,8 @@ class Mol:
         value : float, int
             Either a positive float measuring similarity or -1 if invalid.
         """
-        mol1 = Chem.MolFromSmiles(self.mol)
-        mol2 = Chem.MolFromSmiles(self.goal)
+        mol1 = Chem.MolFromSmiles(self.start)
+        mol2 = Chem.MolFromSmiles(self.target)
         fingerprint1 = Chem.RDKFingerprint(mol1)
         fingerprint2 = Chem.RDKFingerprint(mol2)
         return round(DataStructs.TanimotoSimilarity(fingerprint1,fingerprint2) * 100, 4) 

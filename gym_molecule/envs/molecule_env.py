@@ -98,7 +98,7 @@ class MoleculeEnvironment(gym.Env):
         6     Remove Atom from Molecule
     """
         
-    def __init__(self, start, target, goal):  
+    def __init__(self, mol, goal):  
         """
         Parameters
         ----------
@@ -111,18 +111,13 @@ class MoleculeEnvironment(gym.Env):
         similarity : float
             The percentage similarity of the mol to the goal, represented as a float.
         """
-        if target == "1":
-            self.molecule = Mol(start, "F")
-            self.molecule.get_random_molecule()
-        else:
-            self.molecule = Mol(start, target)
 
-        self.mol = self.molecule.mol
-        self.goal = self.molecule.goal
-        self.similarity = goal
+        self.molecule = mol
+        self.start_molecule = mol.start
+        self.target_molecule = mol.target
         
-        self.similarity = goal       
-        self.valid_step = True 
+        self.similarity = goal
+        self.valid_step = True
          
         high = np.array([len(self.molecule.get_atoms()), len(self.molecule.get_bonds())], dtype=np.float32)
             
@@ -208,10 +203,10 @@ class MoleculeEnvironment(gym.Env):
     def reset(self):
         """Resets the state of the environment.
         """
-     
-        self.molecule.goal = self.goal
-        self.molecule.mol = self.mol
-        self.molecule.modifications = [self.mol]
+        
+        self.molecule.target = self.target_molecule
+        self.molecule.start = self.start_molecule
+        self.molecule.modifications = [self.start_molecule]
         return self.molecule.get_similarity()
 
     def render(self):
