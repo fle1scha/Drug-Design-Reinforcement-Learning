@@ -3,6 +3,7 @@ import os
 from rdkit import Chem, DataStructs
 from rdkit.Chem import Draw
 import random
+import copy
 
 
 # TODO: original atom included
@@ -97,8 +98,14 @@ class Mol:
         
     # Returns Random Goal from library data frame   
     
+<<<<<<< HEAD
     def get_random_molecule(self):
         """Returns a random goal as the optimisation goal for the molecule.
+=======
+    def GetRandomMolecule(self):
+        """
+        Returns a random goal as the optimisation goal for the molecule.
+>>>>>>> 716c667... Added the functionality for adding brackets to an atom
 
         Returns
         ----------
@@ -174,10 +181,48 @@ class Mol:
         if self.is_valid(new_molecule) == True:
             self.modifications.append(back)
             self.modifications.insert(0,front)
+            self.modifications = list(filter(None, self.modifications))
+
             self.mol = new_molecule
             return True
         else:
             return False
+        
+    # Adding an Atom to the molecule
+    def add_brackets(self, typeof, index):
+        """
+        Adds a bracket to a sepcified atom within the molecule.
+
+        Parameters
+        ----------
+        typeof : int
+            either 1 for round or 2 for square
+
+        index : str
+            The string represetntaion of the atom being added to the back.
+            
+        Returns
+        ----------
+        false : boolean
+            If the molecule is chemically invalid and a change has not been made.
+
+        true : boolean
+            If the molecule is chemically valid and a change has been made.
+            
+        """
+        current_modifications = copy.copy(self.modifications)
+        if typeof == 1:
+            current_modifications[index] = "(" + current_modifications[index] + ")"
+        else:
+            current_modifications[index] = "[" + current_modifications[index] + "]"
+        new_molecule = "".join(current_modifications)
+        if self.isValid(new_molecule) == True:
+            self.modifications = current_modifications
+            self.mol = new_molecule
+            return True
+        else:
+            return False
+        
         
     # functionality to remove an atom   
     def remove_atom(self,index):
