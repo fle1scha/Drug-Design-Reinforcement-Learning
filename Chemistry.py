@@ -109,13 +109,13 @@ class Mol:
         False : Boolean
             The method was unable to return a random goal.
         """
-        if self.mol == "1":
-                self.mol = random.choice(self.get_atoms())
-
         if self.present:
             random_mol = self.df.sample()
 
-            self.goal = str(random_mol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type   
+            self.goal = str(random_mol['SMILES']).split("\n")[0].split()[1]    # easy substring to remove object type  
+            if self.mol == "1":
+                self.mol = random.choice(self.get_atoms())
+
             return random_mol['Compound ID']
 
         else:
