@@ -84,8 +84,6 @@ class Mol:
         self.goal = goal   # molecule to represent the optimised state
         self.bondmap = {1.0:"",1.5:"",2.0:"=",3.0:"#"} 
         self.modifications = [self.mol]    # building blocks of the molecule
-        if self.mol == "1":
-                self.mol = random.choice(self.get_atoms())
 
      
         #  Connect library if present
@@ -111,6 +109,8 @@ class Mol:
         False : Boolean
             The method was unable to return a random goal.
         """
+        if self.mol == "1":
+                self.mol = random.choice(self.get_atoms())
 
         if self.present:
             random_mol = self.df.sample()
@@ -128,7 +128,7 @@ class Mol:
         list(atoms) : list
             A list of the atoms in the optimisation goal.
         """
-
+        
         temp_mol = Chem.MolFromSmiles(self.goal)
         atoms = set()
         for a in temp_mol.GetAtoms():
