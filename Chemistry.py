@@ -143,9 +143,9 @@ class Mol:
         list(bonds) : list
             A list of possible bonds to construct the molecule with.
         """
-        mol_bonds = Chem.MolFromSmiles(self.target).GetBonds()
+        temptarget = Chem.MolFromSmiles(self.target)
         bonds = set()
-        for a in mol_bonds:
+        for a in temptarget.GetBonds():
             bonds.add(a.GetBondTypeAsDouble())
         return list(bonds)
 
