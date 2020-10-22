@@ -1,17 +1,10 @@
-
-
-
-
-
-N
-bracketed atom
-bracketed atom
 C
 O
-bracketed atom
-ring
+C=
+C
+C
+C=
+C
+(C)
 O
-ring
-ring
-ring
 O

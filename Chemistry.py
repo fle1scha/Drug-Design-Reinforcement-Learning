@@ -230,6 +230,15 @@ class Mol:
         index : int
             The index of the atom being removed.
         """
+        current_modifications = copy.copy(self.modifications)
+        del current_modifications[index]
+        new_molecule = "".join(current_modifications)
+        if self.is_valid(new_molecule) == True:
+            self.modifications = current_modifications
+            self.mol = new_molecule
+            return True
+        else:
+            return False
         pass
         
 
@@ -242,7 +251,6 @@ class Mol:
         Chem.MolFromSmiles(self.mol) : Chem.Mol
             A Chem.Mol object.
         """
-
         return Chem.MolFromSmiles(self.mol)
 
     # Uses implicit sanitisation to check chemical validity

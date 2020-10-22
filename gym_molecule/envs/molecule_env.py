@@ -96,7 +96,6 @@ class MoleculeEnvironment(gym.Env):
         4     Add Bracketed Atom to Molecule
         5     Add Ring to Molecule
         6     Remove Atom from Molecule
-        7     Remove Bond from Molecule
     """
         
     def __init__(self, start, target, goal):  
@@ -169,7 +168,6 @@ class MoleculeEnvironment(gym.Env):
         4     Add Bracketed Atom to Molecule
         5     Add Ring to Molecule
         6     Remove Atom from Molecule
-        7     Remove Bond from Molecule
         
         """
 
@@ -196,12 +194,8 @@ class MoleculeEnvironment(gym.Env):
             self.validstep = self.molecule.add_brackets(rd.choice(range(1,3)), rd.choice(range(len(self.molecule.modifications))))
         
         elif action == 5:
-            # TODO: remove atom from molecule
-            pass   
-        elif action == 6:
-            pass    
+            self.validstep = self.molecule.remove_atom(rd.choice(range(len(self.molecule.modifications))))
         else:
-            # TODO: remove bond from molecule
             pass
             
         self.state = self.molecule.get_similarity()

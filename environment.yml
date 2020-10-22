@@ -7,6 +7,9 @@ dependencies:
   - python=3.7.7
   - pip
   - rdkit
+  - numpy
+  - copy
+  - pandas
   - sphinx
   - flake8
   - pytest
