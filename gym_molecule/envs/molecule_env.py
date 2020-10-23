@@ -190,7 +190,7 @@ class MoleculeEnvironment(gym.Env):
             pass
             
         self.state = self.molecule.get_similarity()
-        self.done = bool(self.molecule.get_similarity() >= (self.similarity*100))
+        self.done = bool(self.molecule.get_similarity() >= self.similarity)
         reward = self.calculate_reward()
         
         return np.array(self.state), reward, self.done, self.molecule.modifications
