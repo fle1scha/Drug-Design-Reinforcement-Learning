@@ -1,10 +1,10 @@
-.. TEDD documentation master file, created by
-   sphinx-quickstart on Fri Oct 23 10:02:59 2020.
+.. Training Environment for Drug Design documentation master file, created by
+   sphinx-quickstart on Fri Oct 23 10:20:19 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 Welcome to TEDD's documentation!
-================================
+================================================================
 
 .. toctree::
    :maxdepth: 2

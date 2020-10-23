@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tests package &#8212; TEDD 1.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tests package &#8212; Training Environment for Drug Design 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -36,14 +36,74 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="tests-chemistry-test-module">
-<h2>tests.chemistry_test module<a class="headerlink" href="#tests-chemistry-test-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tests.chemistry_test">
+<span id="tests-chemistry-test-module"></span><h2>tests.chemistry_test module<a class="headerlink" href="#module-tests.chemistry_test" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.chemistry_test.test_chem">
+<em class="property">class </em><code class="sig-prename descclassname">tests.chemistry_test.</code><code class="sig-name descname">test_chem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.chemistry_test.test_chem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Test class for the Chemistry.py class.</p>
+<dl class="py method">
+<dt id="tests.chemistry_test.test_chem.test_add_back">
+<code class="sig-name descname">test_add_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.chemistry_test.test_chem.test_add_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the functionality of adding an atom to the back of a molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.chemistry_test.test_chem.test_add_front">
+<code class="sig-name descname">test_add_front</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.chemistry_test.test_chem.test_add_front" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the functionality of adding an atom to the front of a molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.chemistry_test.test_chem.test_atoms">
+<code class="sig-name descname">test_atoms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.chemistry_test.test_chem.test_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asserts whether the atom space is correct or not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.chemistry_test.test_chem.test_bonds">
+<code class="sig-name descname">test_bonds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.chemistry_test.test_chem.test_bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asserts whether the bond space is correct or not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.chemistry_test.test_chem.test_validity">
+<code class="sig-name descname">test_validity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.chemistry_test.test_chem.test_validity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="tests-context-module">
-<h2>tests.context module<a class="headerlink" href="#tests-context-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tests.context">
+<span id="tests-context-module"></span><h2>tests.context module<a class="headerlink" href="#module-tests.context" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="tests-env-test-module">
-<h2>tests.env_test module<a class="headerlink" href="#tests-env-test-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tests.env_test">
+<span id="tests-env-test-module"></span><h2>tests.env_test module<a class="headerlink" href="#module-tests.env_test" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tests.env_test.test_action_space">
+<code class="sig-prename descclassname">tests.env_test.</code><code class="sig-name descname">test_action_space</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.env_test.test_action_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the format of the action space.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tests.env_test.test_init_goal">
+<code class="sig-prename descclassname">tests.env_test.</code><code class="sig-name descname">test_init_goal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.env_test.test_init_goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether the env correctly sets the goal.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tests.env_test.test_init_mol">
+<code class="sig-prename descclassname">tests.env_test.</code><code class="sig-name descname">test_init_mol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.env_test.test_init_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether the env correctly initiates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tests.env_test.test_main">
+<code class="sig-prename descclassname">tests.env_test.</code><code class="sig-name descname">test_main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.env_test.test_main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that an iteration of the environment-agent interaction is correct.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-tests">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests" title="Permalink to this headline">¶</a></h2>
@@ -57,7 +117,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">TEDD</a></h1>
+<h1 class="logo"><a href="index.html">Training Environment for Drug Design</a></h1>
 
 
 
@@ -101,7 +161,7 @@
       &copy;2020, Antony Fleischer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

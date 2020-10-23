@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry module &#8212; TEDD 1.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chemistry module &#8212; Training Environment for Drug Design 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -31,8 +31,324 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="chemistry-module">
-<h1>Chemistry module<a class="headerlink" href="#chemistry-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-Chemistry">
+<span id="chemistry-module"></span><h1>Chemistry module<a class="headerlink" href="#module-Chemistry" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Chemistry.Mol">
+<em class="property">class </em><code class="sig-prename descclassname">Chemistry.</code><code class="sig-name descname">Mol</code><a class="headerlink" href="#Chemistry.Mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class used to create and modify a molecule object.</p>
+<p>…
+.. attribute:: start</p>
+<blockquote>
+<div><p>The starting molecule of the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt id="Chemistry.Mol.target">
+<code class="sig-name descname">target</code><a class="headerlink" href="#Chemistry.Mol.target" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optimisation goal molecule of the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Chemistry.Mol.RAM">
+<code class="sig-name descname">RAM</code><a class="headerlink" href="#Chemistry.Mol.RAM" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the 3 most recent molecule states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Chemistry.Mol.bondmap">
+<code class="sig-name descname">bondmap</code><a class="headerlink" href="#Chemistry.Mol.bondmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary of the different bonds in the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Chemistry.Mol.modifications">
+<code class="sig-name descname">modifications</code><a class="headerlink" href="#Chemistry.Mol.modifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of possible modifications that can be made to the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Chemistry.Mol.storage">
+<code class="sig-name descname">storage</code><a class="headerlink" href="#Chemistry.Mol.storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of additions that have been made to the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Chemistry.Mol.present">
+<code class="sig-name descname">present</code><a class="headerlink" href="#Chemistry.Mol.present" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean modifier that determines if a molecule library is present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">mol</span></em>, <em class="sig-param"><span class="n">goal</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The constructor method for the Mol class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.get_random_goal">
+<code class="sig-name descname">get_random_goal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.get_random_goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random optimisation goal.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.get_atoms">
+<code class="sig-name descname">get_atoms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.get_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the possible atoms to construct the mol with.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.get_bonds">
+<code class="sig-name descname">get_bonds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.get_bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the possible bonds to construct the mol with.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.add_atom">
+<code class="sig-name descname">add_atom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">Atom</span></em>, <em class="sig-param"><span class="n">back</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.add_atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an Atom to the molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.remove_atom">
+<code class="sig-name descname">remove_atom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.remove_atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes an Atom from the molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.history">
+<code class="sig-name descname">history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the last two states of the molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.get_mol">
+<code class="sig-name descname">get_mol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.get_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Mol object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.check_validity">
+<code class="sig-name descname">check_validity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.check_validity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses implicit sanitization to check chemical validity of a molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.display_changes">
+<code class="sig-name descname">display_changes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.display_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the current and previous state of the mol object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">def save_modifications(self)</code></dt>
+<dd><p>Saves the modifications of the agent</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">def set_start_molecule(self, start)</code></dt>
+<dd><p>The mutator method for the start molecule of the environment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">def set_target_molecule(self, target)</code></dt>
+<dd><p>The mutator method for the target molecule of the environment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id0">
+<code class="sig-name descname">add_atom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">front</span></em>, <em class="sig-param"><span class="n">back</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an atom to the front or back of the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>front</strong> (<em>str</em>) – The string represetntaion of the atom being added to the front.</p></li>
+<li><p><strong>back</strong> (<em>str</em>) – The string represetntaion of the atom being added to the back.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>false</strong> (<em>boolean</em>) – If the molecule is chemically invalid and a change has not been made.</p></li>
+<li><p><strong>true</strong> (<em>boolean</em>) – If the molecule is chemically valid and a change has been made.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.add_brackets">
+<code class="sig-name descname">add_brackets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">typeof</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.add_brackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a bracket to a sepcified atom within the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typeof</strong> (<em>int</em>) – either 1 for round or 2 for square</p></li>
+<li><p><strong>index</strong> (<em>str</em>) – The string represetntaion of the atom being added to the back.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>false</strong> (<em>boolean</em>) – If the molecule is chemically invalid and a change has not been made.</p></li>
+<li><p><strong>true</strong> (<em>boolean</em>) – If the molecule is chemically valid and a change has been made.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id1">
+<code class="sig-name descname">get_atoms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor method for the list of possible bonds to construct the molecule with.
+:returns: <strong>list(atoms)</strong> – A list of the atoms in the optimisation goal.
+:rtype: list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id2">
+<code class="sig-name descname">get_bonds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor method for the list of possible bonds to construct the molecule with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>list(bonds)</strong> – A list of possible bonds to construct the molecule with.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id3">
+<code class="sig-name descname">get_mol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor method for the current molecule’s Mol object representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>Chem.MolFromSmiles(self.start)</strong> – A Chem.Mol object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.get_random_molecule">
+<code class="sig-name descname">get_random_molecule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_target</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.get_random_molecule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random goal as the optimisation goal for the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>randomMol[‘Compound ID’]</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><p>?</p>
+</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>False<span class="classifier">Boolean</span></dt><dd><p>The method was unable to return a random goal.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.get_similarity">
+<code class="sig-name descname">get_similarity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.get_similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the Taninoto Similarity between two molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>value</strong> – Either a positive float measuring similarity or -1 if invalid.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float, int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mol</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the chemical validity of the molecule state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>false</strong> (<em>boolean</em>) – If the molecule is chemically invalid.</p></li>
+<li><p><strong>true</strong> (<em>boolean</em>) – If the molecule is chemically valid.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id4">
+<code class="sig-name descname">remove_atom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes an atom from the molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – The index of the atom being removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.save_modifications">
+<code class="sig-name descname">save_modifications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.save_modifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the modifications of the agent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.set_start_molecule">
+<code class="sig-name descname">set_start_molecule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.set_start_molecule" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mutator method for the start molecule of the environment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Chemistry.Mol.set_target_molecule">
+<code class="sig-name descname">set_target_molecule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Chemistry.Mol.set_target_molecule" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mutator method for the target molecule of the environment.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -42,7 +358,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">TEDD</a></h1>
+<h1 class="logo"><a href="index.html">Training Environment for Drug Design</a></h1>
 
 
 
@@ -86,7 +402,7 @@
       &copy;2020, Antony Fleischer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
