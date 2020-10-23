@@ -199,9 +199,7 @@ class MoleculeEnvironment(gym.Env):
     def reset(self):
         """Resets the state of the environment.
         """
-        
-        self.molecule.target = self.target_molecule
-        self.molecule.start = self.start_molecule
+        self.molecule.start = rd.choice(self.atom_space)
         self.molecule.modifications = [self.start_molecule]
         return self.molecule.get_similarity()
 
