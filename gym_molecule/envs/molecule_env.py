@@ -201,6 +201,7 @@ class MoleculeEnvironment(gym.Env):
         """
         self.molecule.start = rd.choice(self.atom_space)
         self.molecule.modifications = [self.start_molecule]
+        self.render()
         return self.molecule.get_similarity()
 
     def render(self):
