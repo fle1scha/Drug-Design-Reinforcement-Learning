@@ -79,12 +79,9 @@ class MoleculeEnvironment(gym.Env):
     """
     """
     Observation:
-        Type: Box(4)
+        Type: Box(1)
         Num     Observation                                  Min          Max
-        0       Number of Atoms (starting molecule)          0            Number of Atoms (starting molecule)
-        1       Number of Bonds (starting molecule)          0            Number of Bonds (starting molecule)
-        2       Number of Atoms (target molecule)            0            Number of Atoms (target molecule)  
-        3       Number of Bonds (target molecule)            0            Number of Bonds (target molecule) 
+        0       Similarity between molecule and target         0.00         100.00
         
     Actions:
         Type: Discrete(6)
