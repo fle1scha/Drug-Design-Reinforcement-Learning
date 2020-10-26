@@ -1,11 +1,4 @@
-O
-N
-O
-C=
-N
+O=
+C
 [C]
 C
-C
-O
-C
-=C
